@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"go-element/com"
-	"go-element/uiautomation"
 	"unsafe"
+
+	"go-element/uiautomation"
+
+	"go-element/com"
 )
 
 func main() {
@@ -16,10 +17,10 @@ func main() {
 	// new
 	root := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	// uiautomation.TreeString(elems, 0)
-	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentLocalizedControlType == "菜单项目" && elem.CurrentName == "编辑"
-	}
-	foundElement := uiautomation.SearchElem(elems, fn)
-	fmt.Printf("foundElement: %#v\n", foundElement)
+	uiautomation.TreeString(elems, 0)
+	// fn := func(elem *uiautomation.Element) bool {
+	// 	return elem.CurrentLocalizedControlType == "菜单项目" && elem.CurrentName == "编辑"
+	// }
+	// foundElement := uiautomation.SearchElem(elems, fn)
+	// fmt.Printf("foundElement: %#v\n", foundElement)
 }

@@ -108,7 +108,7 @@ func setFocus(ele *IUIAutomationElement) {
 	)
 }
 
-func (e *Element) String() string {
+func (e *Element) FormatString() string {
 	val := reflect.ValueOf(e)
 	val = reflect.Indirect(val)
 	num := val.NumField()
