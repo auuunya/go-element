@@ -85,7 +85,7 @@ func getClickablePoint(ele *IUIAutomationElement) *TagPoint {
 	}
 	return nil
 }
-func getCurrentPattern(ele *IUIAutomationElement, patternid int) {
+func getCurrentPattern(ele *IUIAutomationElement, patternid PatternId) {
 }
 func getCurrentPatternAs(ele *IUIAutomationElement) {
 }

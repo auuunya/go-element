@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"qwele/com"
-	"qwele/uiautomation"
+	"go-element/com"
+	"go-element/uiautomation"
 	"unsafe"
 )
 
