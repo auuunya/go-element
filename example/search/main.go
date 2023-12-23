@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"unsafe"
 
-	"go-element/uiautomation"
+	"github.com/auuunya/go-element/uiautomation"
 
-	"go-element/com"
+	"github.com/auuunya/go-element/com"
 )
 
 func main() {
