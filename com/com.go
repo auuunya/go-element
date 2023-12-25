@@ -1,6 +1,7 @@
 package com
 
 import (
+	"errors"
 	"syscall"
 	"unsafe"
 )
@@ -13,6 +14,8 @@ var (
 	procCoInitialize     = ole32.NewProc("CoInitialize")
 	procCoUninitialize   = ole32.NewProc("CoUninitialize")
 	procFindWindowA      = user32.NewProc("FindWindowA")
+
+	ErrorNotFoundWindow = errors.New("not found window")
 )
 
 var (
@@ -57,7 +60,11 @@ func StringToCharPtr(str string) *uint8 {
 }
 
 func GetWindowForString(classname, windowname string) uintptr {
-	return findWindowA(classname, windowname)
+	find := findWindowA(classname, windowname)
+	if find == 0 {
+		panic(ErrorNotFoundWindow)
+	}
+	return find
 }
 
 func CoInitialize() {
