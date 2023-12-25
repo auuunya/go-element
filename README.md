@@ -1,5 +1,7 @@
 # go-element
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/auuunya/go-element.svg)](https://pkg.go.dev/github.com/auuunya/go-element)
+
 This is a windows window application for an element traversal, you can find the elements you want to operate the control, and then the next step to click or enter the operation, etc., can be traversed for the element tree, search for the specified element
 
 ### Examples:
@@ -43,6 +45,6 @@ func main() {
 	ppv := (*uiautomation.IUIAutomation)(unsafe.Pointer(instance))
 	root := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
-    uiautomation.WriteJSONToFile(elems, "filename.json")
+	uiautomation.WriteJSONToFile(elems, "filename.json")
 }
 ```
