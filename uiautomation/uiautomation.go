@@ -6,12 +6,10 @@ import (
 )
 
 type IUIAutomation struct {
-	vtbl *IUIAutomationVtbl
+	vtbl *IUnKnown
 }
 type IUIAutomationVtbl struct {
-	QueryInterface uintptr
-	AddRef         uintptr
-	Release        uintptr
+	IUnKnownVtbl
 
 	CompareElements                           uintptr
 	CompareRuntimeIds                         uintptr
@@ -71,12 +69,10 @@ type IUIAutomationVtbl struct {
 }
 
 type IUIAutomationElement struct {
-	vtbl *IUIAutomationElementVtbl
+	vtbl *IUnKnown
 }
 type IUIAutomationElementVtbl struct {
-	QueryInterface uintptr
-	AddRef         uintptr
-	Release        uintptr
+	IUnKnownVtbl
 
 	SetFocus                        uintptr
 	GetRuntimeId                    uintptr
@@ -163,13 +159,11 @@ type IUIAutomationElementVtbl struct {
 }
 
 type IUIAutomationTreeWalker struct {
-	vtbl *IUIAutomationTreeWalkerVtbl
+	vtbl *IUnKnown
 }
 
 type IUIAutomationTreeWalkerVtbl struct {
-	QueryInterface uintptr
-	AddRef         uintptr
-	Release        uintptr
+	IUnKnownVtbl
 
 	Get_Condition                       uintptr
 	GetFirstChildElement                uintptr

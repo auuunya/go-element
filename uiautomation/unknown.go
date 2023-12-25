@@ -1,7 +1,7 @@
 package uiautomation
 
 type IUnKnown struct {
-	Vtbl *interface{}
+	Vtbl *IUnKnownVtbl
 }
 
 type IUnKnownVtbl struct {
