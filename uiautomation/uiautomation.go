@@ -198,27 +198,6 @@ type IUIAutomationElementArrayVtbl struct {
 	GetElement uintptr
 }
 
-type ITextProvider struct {
-	vtbl *ITextProviderVtbl
-}
-type ITextProviderVtbl struct {
-	QueryInterface uintptr
-	AddRef         uintptr
-	Release        uintptr
-
-	Get_DocumentRange uintptr
-}
-
-type IUIAutomationTextRange struct {
-	vtbl *IUIAutomationTextRangeVtbl
-}
-type IUIAutomationTextRangeVtbl struct {
-	QueryInterface uintptr
-	AddRef         uintptr
-	Release        uintptr
-	GetText        uintptr
-}
-
 type TagPoint struct {
 	X int32
 	Y int32
@@ -226,7 +205,6 @@ type TagPoint struct {
 type RECT struct {
 	Left, Top, Right, Bottom int32
 }
-
 type SafeArray struct {
 	CbElement uint32
 	CDims     uint16
@@ -235,8 +213,6 @@ type SafeArray struct {
 	PvData    uintptr
 	Rgsabound [1]byte
 }
-
-type PROPERTYID uintptr
 
 func AddRef(v *IUIAutomation) uintptr {
 	ret, _, _ := syscall.SyscallN(

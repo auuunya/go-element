@@ -85,7 +85,15 @@ func getClickablePoint(ele *IUIAutomationElement) *TagPoint {
 	}
 	return nil
 }
-func getCurrentPattern(ele *IUIAutomationElement, patternid PatternId) {
+func GetCurrentPattern(ele *IUIAutomationElement, patternid PatternId) uintptr {
+	var patternObj uintptr
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(ele.vtbl)).GetCurrentPattern,
+		uintptr(unsafe.Pointer(ele)),
+		uintptr(patternid),
+		uintptr(unsafe.Pointer(&patternObj)),
+	)
+	return patternObj
 }
 func getCurrentPatternAs(ele *IUIAutomationElement) {
 }
