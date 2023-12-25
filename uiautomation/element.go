@@ -490,6 +490,18 @@ func SearchElem(elem *Element, searchFunc SearchFunc) *Element {
 	return nil
 }
 
+func FindElems(elem *Element, searchFunc SearchFunc) (elems []*Element) {
+	if searchFunc(elem) {
+		elems = append(elems, elem)
+	}
+	for _, childElem := range elem.Child {
+		if found := FindElems(childElem, searchFunc); found != nil {
+			elems = append(elems, found...)
+		}
+	}
+	return elems
+}
+
 func NewElement(uiaumation *IUIAutomationElement) *Element {
 	return &Element{
 		UIAutoElement: uiaumation,
