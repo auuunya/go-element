@@ -1,4 +1,4 @@
-package com
+package uiautomation
 
 import (
 	"errors"
@@ -67,28 +67,36 @@ func GetWindowForString(classname, windowname string) uintptr {
 	return find
 }
 
-func CoInitialize() {
-	procCoInitialize.Call(
+func CoInitialize() error {
+	ret, _, _ := procCoInitialize.Call(
 		uintptr(0),
 	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
 }
 func CoUninitialize() {
 	procCoUninitialize.Call()
 }
 
-func CreateInstance() (instanceVal *interface{}) {
+func CreateInstance() (unsafe.Pointer, error) {
 	return createInstance()
 }
 
-func createInstance() (instanceVal *interface{}) {
-	procCoCreateInstance.Call(
+func createInstance() (unsafe.Pointer, error) {
+	var retVal unsafe.Pointer
+	ret, _, _ := procCoCreateInstance.Call(
 		uintptr(unsafe.Pointer(CLSID_CUIAutomation)),
 		uintptr(0),
 		uintptr(CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER),
 		uintptr(unsafe.Pointer(IID_IUIAutomation)),
-		uintptr(unsafe.Pointer(&instanceVal)),
+		uintptr(unsafe.Pointer(&retVal)),
 	)
-	return
+	if ret != 0 {
+		return nil, HResult(ret)
+	}
+	return retVal, nil
 }
 func stringToCharPtr(str string) *uint8 {
 	chars := append([]byte(str), 0) // null terminated
