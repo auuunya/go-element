@@ -1,11 +1,11 @@
 package uiautomation
 
-// https://learn.microsoft.com/zh-cn/windows/win32/api/oleacc/nn-oleacc-iaccessible
 type IAccessible struct {
 	vtbl *IDispatch
 }
 
 type IAccessibleVtbl struct {
+	// https://learn.microsoft.com/zh-cn/windows/win32/api/oleacc/nn-oleacc-iaccessible
 	IDispatchVtbl
 	AccDoDefaultAction      uintptr
 	AccHitTest              uintptr

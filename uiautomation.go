@@ -274,8 +274,8 @@ func (v *IUIAutomationElement) GetCurrentPropertyValueEx(id PROPERTYID, defaultV
 	}
 	return retVal, nil
 }
-func (v *IUIAutomationElement) GetRuntimeId() (*SafeArray, error) {
-	var retVal *SafeArray
+func (v *IUIAutomationElement) GetRuntimeId() (*TagSafeArray, error) {
+	var retVal *TagSafeArray
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).GetRuntimeId,
 		uintptr(unsafe.Pointer(v)),

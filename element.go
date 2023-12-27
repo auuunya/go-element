@@ -72,16 +72,13 @@ func (e *Element) FormatString() string {
 		fieldValue := elemValue.Field(i)
 		if fieldValue.Kind() == reflect.Ptr && !fieldValue.IsNil() {
 			if fieldValue.CanAddr() {
-				// fmt.Printf("fieldValue.Addr():%#v\n", fieldValue.Addr().Interface())
 				v := fieldValue.Addr().Interface()
-				// fmt.Printf("222: %#v\n", v)
 				buf += fmt.Sprintf("[%s]:[%v],", fieldName, v)
 			}
 		} else {
 			buf += fmt.Sprintf("[%s]:[%v],", fieldName, fieldValue.Interface())
 		}
 	}
-	// buf += fmt.Sprintf("[%s]:[%v],", fieldName, fieldValue.Interface())
 	return buf
 }
 func (e *Element) SetUIAutomation(uiaumation *IUIAutomationElement) {

@@ -23,8 +23,8 @@ var (
 	IID_IUIAutomation   = &syscall.GUID{0x30cbe57d, 0xd9d0, 0x452a, [8]byte{0xab, 0x13, 0x7a, 0xc5, 0xac, 0x48, 0x25, 0xee}}
 )
 
-// CLSCTX
 var (
+	// https://learn.microsoft.com/zh-cn/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
 	CLSCTX_INPROC_SERVER                   = 0x1
 	CLSCTX_INPROC_HANDLER                  = 0x2
 	CLSCTX_LOCAL_SERVER                    = 0x4

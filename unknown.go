@@ -49,8 +49,8 @@ func QueryInterface(v *IUnKnown, riid syscall.GUID) (unsafe.Pointer, error) {
 	return retVal, nil
 }
 
-// error info https://pkg.go.dev/golang.org/x/sys/windows
 func HResult(ret uintptr) error {
+	// error info https://pkg.go.dev/golang.org/x/sys/windows
 	return fmt.Errorf("COM Error: 0x%x", ret)
 }
 
