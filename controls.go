@@ -1167,7 +1167,7 @@ func (v *ISpreadsheetProvider) GetItemByName(name string) (*IRawElementProviderS
 	ret, _, _ := syscall.SyscallN(
 		(*ISpreadsheetProviderVtbl)(unsafe.Pointer(v.vtbl)).GetItemByName,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(retVal2),
+		uintptr(unsafe.Pointer(retVal2)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {
@@ -1614,7 +1614,7 @@ func (v *ITextRangeProvider) FindText(in string, in2 int32, in3 int32) (*ITextRa
 	ret, _, _ := syscall.SyscallN(
 		(*ITextRangeProviderVtbl)(unsafe.Pointer(v.vtbl)).FindText,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(retVal2),
+		uintptr(unsafe.Pointer(retVal2)),
 		uintptr(in2),
 		uintptr(in3),
 		uintptr(unsafe.Pointer(&retVal)),
@@ -2180,7 +2180,7 @@ func (v *IValueProvider) SetValue(in string) error {
 	ret, _, _ := syscall.SyscallN(
 		(*IValueProviderVtbl)(unsafe.Pointer(v.vtbl)).SetValue,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(retVal),
+		uintptr(unsafe.Pointer(retVal)),
 	)
 	if ret != 0 {
 		return HResult(ret)
