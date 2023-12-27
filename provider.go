@@ -6,46 +6,6 @@ import (
 	"unsafe"
 )
 
-type PatternId uintptr
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-controlpattern-ids
-	UIA_AnnotationPatternId        PatternId = 10023
-	UIA_CustomNavigationPatternId  PatternId = 10033
-	UIA_DockPatternId              PatternId = 10011
-	UIA_DragPatternId              PatternId = 10030
-	UIA_DropTargetPatternId        PatternId = 10031
-	UIA_ExpandCollapsePatternId    PatternId = 10005
-	UIA_GridItemPatternId          PatternId = 10007
-	UIA_GridPatternId              PatternId = 10006
-	UIA_InvokePatternId            PatternId = 10000
-	UIA_ItemContainerPatternId     PatternId = 10019
-	UIA_LegacyIAccessiblePatternId PatternId = 10018
-	UIA_MultipleViewPatternId      PatternId = 10008
-	UIA_ObjectModelPatternId       PatternId = 10022
-	UIA_RangeValuePatternId        PatternId = 10003
-	UIA_ScrollItemPatternId        PatternId = 10017
-	UIA_ScrollPatternId            PatternId = 10004
-	UIA_SelectionItemPatternId     PatternId = 10010
-	UIA_SelectionPatternId         PatternId = 10001
-	UIA_SpreadsheetPatternId       PatternId = 10026
-	UIA_SpreadsheetItemPatternId   PatternId = 10027
-	UIA_StylesPatternId            PatternId = 10025
-	UIA_SynchronizedInputPatternId PatternId = 10021
-	UIA_TableItemPatternId         PatternId = 10013
-	UIA_TablePatternId             PatternId = 10012
-	UIA_TextChildPatternId         PatternId = 10029
-	UIA_TextEditPatternId          PatternId = 10032
-	UIA_TextPatternId              PatternId = 10014
-	UIA_TextPattern2Id             PatternId = 10024
-	UIA_TogglePatternId            PatternId = 10015
-	UIA_TransformPatternId         PatternId = 10016
-	UIA_TransformPattern2Id        PatternId = 10028
-	UIA_ValuePatternId             PatternId = 10002
-	UIA_VirtualizedItemPatternId   PatternId = 10020
-	UIA_WindowPatternId            PatternId = 10009
-)
-
 var (
 	ErrorBstrPointerNil = errors.New("BSTR pointer is nil")
 )
@@ -76,10 +36,10 @@ type IRawElementProviderSimpleVtbl struct {
 	GetPropertyValue           uintptr
 }
 
-func NewIAnnotationProvider(obj uintptr) *IAnnotationProvider {
+func NewIAnnotationProvider(obj *IUnKnown) *IAnnotationProvider {
 	return newIAnnotationProvider(obj)
 }
-func newIAnnotationProvider(obj uintptr) *IAnnotationProvider {
+func newIAnnotationProvider(obj *IUnKnown) *IAnnotationProvider {
 	return (*IAnnotationProvider)(unsafe.Pointer(obj))
 }
 func (v *IAnnotationProvider) Get_AnnotationTypeId() int32 {
@@ -169,10 +129,10 @@ const (
 	DockPosition_None
 )
 
-func NewIDockProvider(obj uintptr) *IDockProvider {
+func NewIDockProvider(obj *IUnKnown) *IDockProvider {
 	return newIDockProvider(obj)
 }
-func newIDockProvider(obj uintptr) *IDockProvider {
+func newIDockProvider(obj *IUnKnown) *IDockProvider {
 	return (*IDockProvider)(unsafe.Pointer(obj))
 }
 func (v *IDockProvider) Get_DockPosition() *DockPosition {
@@ -207,10 +167,10 @@ type IDragProviderVtbl struct {
 	GetGrabbedItems uintptr
 }
 
-func NewIDragProvider(obj uintptr) *IDragProvider {
+func NewIDragProvider(obj *IUnKnown) *IDragProvider {
 	return newIDragProvider(obj)
 }
-func newIDragProvider(obj uintptr) *IDragProvider {
+func newIDragProvider(obj *IUnKnown) *IDragProvider {
 	return (*IDragProvider)(unsafe.Pointer(obj))
 }
 func (v *IDragProvider) Get_DropEffect() string {
@@ -264,10 +224,10 @@ type IDropTargetProviderVtbl struct {
 	Get_DropTargetEffects uintptr
 }
 
-func NewIDropTargetProvider(obj uintptr) *IDropTargetProvider {
+func NewIDropTargetProvider(obj *IUnKnown) *IDropTargetProvider {
 	return newIDropTargetProvider(obj)
 }
-func newIDropTargetProvider(obj uintptr) *IDropTargetProvider {
+func newIDropTargetProvider(obj *IUnKnown) *IDropTargetProvider {
 	return (*IDropTargetProvider)(unsafe.Pointer(obj))
 }
 func (v *IDropTargetProvider) Get_DropTargetEffect() string {
@@ -312,10 +272,10 @@ const (
 	ExpandCollapseState_LeafNode
 )
 
-func NewIExpandCollapseProvider(obj uintptr) *IExpandCollapseProvider {
+func NewIExpandCollapseProvider(obj *IUnKnown) *IExpandCollapseProvider {
 	return newIExpandCollapseProvider(obj)
 }
-func newIExpandCollapseProvider(obj uintptr) *IExpandCollapseProvider {
+func newIExpandCollapseProvider(obj *IUnKnown) *IExpandCollapseProvider {
 	return (*IExpandCollapseProvider)(unsafe.Pointer(obj))
 }
 func (v *IExpandCollapseProvider) Collapse() (int32, error) {
@@ -360,10 +320,10 @@ type IGridItemProviderVtbl struct {
 	Get_RowSpan        uintptr
 }
 
-func NewIGridItemProvider(obj uintptr) *IGridItemProvider {
+func NewIGridItemProvider(obj *IUnKnown) *IGridItemProvider {
 	return newIGridItemProvider(obj)
 }
-func newIGridItemProvider(obj uintptr) *IGridItemProvider {
+func newIGridItemProvider(obj *IUnKnown) *IGridItemProvider {
 	return (*IGridItemProvider)(unsafe.Pointer(obj))
 }
 func (v *IGridItemProvider) Get_Column() int32 {
@@ -422,10 +382,10 @@ type IGridProviderVtbl struct {
 	GetItem         uintptr
 }
 
-func NewIGridProvider(obj uintptr) *IGridProvider {
+func NewIGridProvider(obj *IUnKnown) *IGridProvider {
 	return newIGridProvider(obj)
 }
-func newIGridProvider(obj uintptr) *IGridProvider {
+func newIGridProvider(obj *IUnKnown) *IGridProvider {
 	return (*IGridProvider)(unsafe.Pointer(obj))
 }
 func (v *IGridProvider) Get_ColumnCount() int32 {
@@ -469,10 +429,10 @@ type IInvokeProviderVtbl struct {
 	Invoke uintptr
 }
 
-func NewIInvokeProvider(obj uintptr) *IInvokeProvider {
+func NewIInvokeProvider(obj *IUnKnown) *IInvokeProvider {
 	return newIInvokeProvider(obj)
 }
-func newIInvokeProvider(obj uintptr) *IInvokeProvider {
+func newIInvokeProvider(obj *IUnKnown) *IInvokeProvider {
 	return (*IInvokeProvider)(unsafe.Pointer(obj))
 }
 func (v *IInvokeProvider) Invoke() error {
@@ -494,10 +454,10 @@ type IItemContainerProviderVtbl struct {
 	FindItemByProperty uintptr
 }
 
-func NewIItemContainerProvider(obj uintptr) *IItemContainerProvider {
+func NewIItemContainerProvider(obj *IUnKnown) *IItemContainerProvider {
 	return newIItemContainerProvider(obj)
 }
-func newIItemContainerProvider(obj uintptr) *IItemContainerProvider {
+func newIItemContainerProvider(obj *IUnKnown) *IItemContainerProvider {
 	return (*IItemContainerProvider)(unsafe.Pointer(obj))
 }
 func (v *IItemContainerProvider) FindItemByProperty(simple *IRawElementProviderSimple, id uintptr, val *VARIANT) (*IRawElementProviderSimple, error) {
@@ -537,10 +497,10 @@ type ILegacyIAccessibleProviderVtbl struct {
 	SetValue             uintptr
 }
 
-func newILegacyIAccessibleProvider(obj uintptr) *ILegacyIAccessibleProvider {
+func newILegacyIAccessibleProvider(obj *IUnKnown) *ILegacyIAccessibleProvider {
 	return (*ILegacyIAccessibleProvider)(unsafe.Pointer(obj))
 }
-func NewILegacyIAccessibleProvider(obj uintptr) *ILegacyIAccessibleProvider {
+func NewILegacyIAccessibleProvider(obj *IUnKnown) *ILegacyIAccessibleProvider {
 	return newILegacyIAccessibleProvider(obj)
 }
 func (v *ILegacyIAccessibleProvider) DoDefaultAction() error {
@@ -732,10 +692,10 @@ type IMultipleViewProviderVtbl struct {
 	SetCurrentView    uintptr
 }
 
-func newIMultipleViewProvider(obj uintptr) *IMultipleViewProvider {
+func newIMultipleViewProvider(obj *IUnKnown) *IMultipleViewProvider {
 	return (*IMultipleViewProvider)(unsafe.Pointer(obj))
 }
-func NewIMultipleViewProvider(obj uintptr) *IMultipleViewProvider {
+func NewIMultipleViewProvider(obj *IUnKnown) *IMultipleViewProvider {
 	return newIMultipleViewProvider(obj)
 }
 func (v *IMultipleViewProvider) Get_CurrentView() int32 {
@@ -798,10 +758,10 @@ type IObjectModelProviderVtbl struct {
 	GetUnderlyingObjectModel uintptr
 }
 
-func newIObjectModelProvider(obj uintptr) *IObjectModelProvider {
+func newIObjectModelProvider(obj *IUnKnown) *IObjectModelProvider {
 	return (*IObjectModelProvider)(unsafe.Pointer(obj))
 }
-func NewIObjectModelProvider(obj uintptr) *IObjectModelProvider {
+func NewIObjectModelProvider(obj *IUnKnown) *IObjectModelProvider {
 	return newIObjectModelProvider(obj)
 }
 func (v *IObjectModelProvider) GetUnderlyingObjectModel() (*IUnKnown, error) {
@@ -831,10 +791,10 @@ type IRangeValueProviderVtbl struct {
 	SetValue        uintptr
 }
 
-func newIRangeValueProvider(obj uintptr) *IRangeValueProvider {
+func newIRangeValueProvider(obj *IUnKnown) *IRangeValueProvider {
 	return (*IRangeValueProvider)(unsafe.Pointer(obj))
 }
-func NewIRangeValueProvider(obj uintptr) *IRangeValueProvider {
+func NewIRangeValueProvider(obj *IUnKnown) *IRangeValueProvider {
 	return newIRangeValueProvider(obj)
 }
 func (v *IRangeValueProvider) Get_IsReadOnly() int32 {
@@ -912,10 +872,10 @@ type IScrollItemProviderVtbl struct {
 	ScrollIntoView uintptr
 }
 
-func newIScrollItemProvider(obj uintptr) *IScrollItemProvider {
+func newIScrollItemProvider(obj *IUnKnown) *IScrollItemProvider {
 	return (*IScrollItemProvider)(unsafe.Pointer(obj))
 }
-func NewIScrollItemProvider(obj uintptr) *IScrollItemProvider {
+func NewIScrollItemProvider(obj *IUnKnown) *IScrollItemProvider {
 	return newIScrollItemProvider(obj)
 }
 func (v *IScrollItemProvider) ScrollIntoView() error {
@@ -944,10 +904,10 @@ type IScrollProviderVtbl struct {
 	SetScrollPercent            uintptr
 }
 
-func newIScrollProvider(obj uintptr) *IScrollProvider {
+func newIScrollProvider(obj *IUnKnown) *IScrollProvider {
 	return (*IScrollProvider)(unsafe.Pointer(obj))
 }
-func NewIScrollProvider(obj uintptr) *IScrollProvider {
+func NewIScrollProvider(obj *IUnKnown) *IScrollProvider {
 	return newIScrollProvider(obj)
 }
 func (v *IScrollProvider) Get_HorizontallyScrollable() int32 {
@@ -1041,10 +1001,10 @@ type ISelectionItemProviderVtbl struct {
 	Select                 uintptr
 }
 
-func newISelectionItemProvider(obj uintptr) *ISelectionItemProvider {
+func newISelectionItemProvider(obj *IUnKnown) *ISelectionItemProvider {
 	return (*ISelectionItemProvider)(unsafe.Pointer(obj))
 }
-func NewISelectionItemProvider(obj uintptr) *ISelectionItemProvider {
+func NewISelectionItemProvider(obj *IUnKnown) *ISelectionItemProvider {
 	return newISelectionItemProvider(obj)
 }
 func (v *ISelectionItemProvider) AddToSelection() error {
@@ -1107,10 +1067,10 @@ type ISelectionProviderVtbl struct {
 	GetSelection            uintptr
 }
 
-func newISelectionProvider(obj uintptr) *ISelectionProvider {
+func newISelectionProvider(obj *IUnKnown) *ISelectionProvider {
 	return (*ISelectionProvider)(unsafe.Pointer(obj))
 }
-func NewISelectionProvider(obj uintptr) *ISelectionProvider {
+func NewISelectionProvider(obj *IUnKnown) *ISelectionProvider {
 	return newISelectionProvider(obj)
 }
 func (v *ISelectionProvider) Get_CanSelectMultiple() int32 {
@@ -1152,10 +1112,10 @@ type ISpreadsheetProviderVtbl struct {
 	GetItemByName uintptr
 }
 
-func newISpreadsheetProvider(obj uintptr) *ISpreadsheetProvider {
+func newISpreadsheetProvider(obj *IUnKnown) *ISpreadsheetProvider {
 	return (*ISpreadsheetProvider)(unsafe.Pointer(obj))
 }
-func NewISpreadsheetProvider(obj uintptr) *ISpreadsheetProvider {
+func NewISpreadsheetProvider(obj *IUnKnown) *ISpreadsheetProvider {
 	return newISpreadsheetProvider(obj)
 }
 func (v *ISpreadsheetProvider) GetItemByName(name string) (*IRawElementProviderSimple, error) {
@@ -1186,10 +1146,10 @@ type ISpreadsheetItemProviderVtbl struct {
 	GetAnnotationTypes   uintptr
 }
 
-func newISpreadsheetItemProvider(obj uintptr) *ISpreadsheetItemProvider {
+func newISpreadsheetItemProvider(obj *IUnKnown) *ISpreadsheetItemProvider {
 	return (*ISpreadsheetItemProvider)(unsafe.Pointer(obj))
 }
-func NewISpreadsheetItemProvider(obj uintptr) *ISpreadsheetItemProvider {
+func NewISpreadsheetItemProvider(obj *IUnKnown) *ISpreadsheetItemProvider {
 	return newISpreadsheetItemProvider(obj)
 }
 func (v *ISpreadsheetItemProvider) Get_Formula() (string, error) {
@@ -1246,10 +1206,10 @@ type IStylesProviderVtbl struct {
 	Get_StyleName         uintptr
 }
 
-func newIStylesProvider(obj uintptr) *IStylesProvider {
+func newIStylesProvider(obj *IUnKnown) *IStylesProvider {
 	return (*IStylesProvider)(unsafe.Pointer(obj))
 }
-func NewIStylesProvider(obj uintptr) *IStylesProvider {
+func NewIStylesProvider(obj *IUnKnown) *IStylesProvider {
 	return newIStylesProvider(obj)
 }
 func (v *IStylesProvider) Get_ExtendedPropertvs() (string, error) {
@@ -1346,10 +1306,10 @@ type ISynchronizedInputProviderVtbl struct {
 	StartListening uintptr
 }
 
-func newISynchronizedInputProvider(obj uintptr) *ISynchronizedInputProvider {
+func newISynchronizedInputProvider(obj *IUnKnown) *ISynchronizedInputProvider {
 	return (*ISynchronizedInputProvider)(unsafe.Pointer(obj))
 }
-func NewISynchronizedInputProvider(obj uintptr) *ISynchronizedInputProvider {
+func NewISynchronizedInputProvider(obj *IUnKnown) *ISynchronizedInputProvider {
 	return newISynchronizedInputProvider(obj)
 }
 func (v *ISynchronizedInputProvider) Cancel() error {
@@ -1383,10 +1343,10 @@ type ITableItemProviderVtbl struct {
 	GetRowHeaderItems    uintptr
 }
 
-func newITableItemProvider(obj uintptr) *ITableItemProvider {
+func newITableItemProvider(obj *IUnKnown) *ITableItemProvider {
 	return (*ITableItemProvider)(unsafe.Pointer(obj))
 }
-func NewITableItemProvider(obj uintptr) *ITableItemProvider {
+func NewITableItemProvider(obj *IUnKnown) *ITableItemProvider {
 	return newITableItemProvider(obj)
 }
 func (v *ITableItemProvider) GetColumnHeaderItems() (*TagSafeArray, error) {
@@ -1424,10 +1384,10 @@ type ITableProviderVtbl struct {
 	GetRowHeaders        uintptr
 }
 
-func newITableProvider(obj uintptr) *ITableProvider {
+func newITableProvider(obj *IUnKnown) *ITableProvider {
 	return (*ITableProvider)(unsafe.Pointer(obj))
 }
-func NewITableProvider(obj uintptr) *ITableProvider {
+func NewITableProvider(obj *IUnKnown) *ITableProvider {
 	return newITableProvider(obj)
 }
 func (v *ITableProvider) Get_RowOrColumnMajor() *RowOrColumnMajor {
@@ -1473,10 +1433,10 @@ type ITextChildProviderVtbl struct {
 	Get_TextRange     uintptr
 }
 
-func newITextChildProvider(obj uintptr) *ITextChildProvider {
+func newITextChildProvider(obj *IUnKnown) *ITextChildProvider {
 	return (*ITextChildProvider)(unsafe.Pointer(obj))
 }
-func NewITextChildProvider(obj uintptr) *ITextChildProvider {
+func NewITextChildProvider(obj *IUnKnown) *ITextChildProvider {
 	return newITextChildProvider(obj)
 }
 func (v *ITextChildProvider) Get_TextContainer() *IRawElementProviderSimple {
@@ -1523,10 +1483,10 @@ type ITextRangeProviderVtbl struct {
 	Select                uintptr
 }
 
-func newITextRangeProvider(obj uintptr) *ITextRangeProvider {
+func newITextRangeProvider(obj *IUnKnown) *ITextRangeProvider {
 	return (*ITextRangeProvider)(unsafe.Pointer(obj))
 }
-func NewITextRangeProvider(obj uintptr) *ITextRangeProvider {
+func NewITextRangeProvider(obj *IUnKnown) *ITextRangeProvider {
 	return newITextRangeProvider(obj)
 }
 func (v *ITextRangeProvider) AddToSelection() error {
@@ -1774,10 +1734,10 @@ type ITextEditProviderVtbl struct {
 	GetConversionTarget  uintptr
 }
 
-func newITextEditProvider(obj uintptr) *ITextEditProvider {
+func newITextEditProvider(obj *IUnKnown) *ITextEditProvider {
 	return (*ITextEditProvider)(unsafe.Pointer(obj))
 }
-func NewITextEditProvider(obj uintptr) *ITextEditProvider {
+func NewITextEditProvider(obj *IUnKnown) *ITextEditProvider {
 	return newITextEditProvider(obj)
 }
 func (v *ITextEditProvider) GetActiveComposition() (*ITextRangeProvider, error) {
@@ -1818,10 +1778,10 @@ type ITextProviderVtbl struct {
 	RangeFromPoint             uintptr
 }
 
-func newITextProvider(obj uintptr) *ITextProvider {
+func newITextProvider(obj *IUnKnown) *ITextProvider {
 	return (*ITextProvider)(unsafe.Pointer(obj))
 }
-func NewITextProvider(obj uintptr) *ITextProvider {
+func NewITextProvider(obj *IUnKnown) *ITextProvider {
 	return newITextProvider(obj)
 }
 func (v *ITextProvider) Get_DocumentRange() *ITextRangeProvider {
@@ -1903,10 +1863,10 @@ type ITextProvider2Vtbl struct {
 	RangeFromAnnotation uintptr
 }
 
-func newITextProvider2(obj uintptr) *ITextProvider2 {
+func newITextProvider2(obj *IUnKnown) *ITextProvider2 {
 	return (*ITextProvider2)(unsafe.Pointer(obj))
 }
-func NewITextProvider2(obj uintptr) *ITextProvider2 {
+func NewITextProvider2(obj *IUnKnown) *ITextProvider2 {
 	return newITextProvider2(obj)
 }
 func (v *ITextProvider2) GetCaretRange() (int32, *ITextRangeProvider, error) {
@@ -1946,10 +1906,10 @@ type IToggleProviderVtbl struct {
 	Toggle          uintptr
 }
 
-func newIToggleProvider(obj uintptr) *IToggleProvider {
+func newIToggleProvider(obj *IUnKnown) *IToggleProvider {
 	return (*IToggleProvider)(unsafe.Pointer(obj))
 }
-func NewIToggleProvider(obj uintptr) *IToggleProvider {
+func NewIToggleProvider(obj *IUnKnown) *IToggleProvider {
 	return newIToggleProvider(obj)
 }
 func (v *IToggleProvider) Get_ToggleState() *ToggleState {
@@ -1985,10 +1945,10 @@ type ITransformProviderVtbl struct {
 	Rotate        uintptr
 }
 
-func newITransformProvider(obj uintptr) *ITransformProvider {
+func newITransformProvider(obj *IUnKnown) *ITransformProvider {
 	return (*ITransformProvider)(unsafe.Pointer(obj))
 }
-func NewITransformProvider(obj uintptr) *ITransformProvider {
+func NewITransformProvider(obj *IUnKnown) *ITransformProvider {
 	return newITransformProvider(obj)
 }
 func (v *ITransformProvider) Get_CanMove() int32 {
@@ -2068,10 +2028,10 @@ type ITransformProvider2Vtbl struct {
 	ZoomByUnit      uintptr
 }
 
-func newITransformProvider2(obj uintptr) *ITransformProvider2 {
+func newITransformProvider2(obj *IUnKnown) *ITransformProvider2 {
 	return (*ITransformProvider2)(unsafe.Pointer(obj))
 }
-func NewITransformProvider2(obj uintptr) *ITransformProvider2 {
+func NewITransformProvider2(obj *IUnKnown) *ITransformProvider2 {
 	return newITransformProvider2(obj)
 }
 func (v *ITransformProvider2) Get_CanZoom() int32 {
@@ -2143,10 +2103,10 @@ type IValueProviderVtbl struct {
 	SetValue       uintptr
 }
 
-func newIValueProvider(obj uintptr) *IValueProvider {
+func newIValueProvider(obj *IUnKnown) *IValueProvider {
 	return (*IValueProvider)(unsafe.Pointer(obj))
 }
-func NewIValueProvider(obj uintptr) *IValueProvider {
+func NewIValueProvider(obj *IUnKnown) *IValueProvider {
 	return newIValueProvider(obj)
 }
 func (v *IValueProvider) Get_IsReadOnly() int32 {
@@ -2175,7 +2135,7 @@ func (v *IValueProvider) Get_Value() (string, error) {
 func (v *IValueProvider) SetValue(in string) error {
 	retVal, err := syscall.UTF16PtrFromString(in)
 	if err != nil {
-		return nil
+		return err
 	}
 	ret, _, _ := syscall.SyscallN(
 		(*IValueProviderVtbl)(unsafe.Pointer(v.vtbl)).SetValue,
@@ -2196,10 +2156,10 @@ type IVirtualizedItemProviderVtbl struct {
 	Realize uintptr
 }
 
-func newIVirtualizedItemProvider(obj uintptr) *IVirtualizedItemProvider {
+func newIVirtualizedItemProvider(obj *IUnKnown) *IVirtualizedItemProvider {
 	return (*IVirtualizedItemProvider)(unsafe.Pointer(obj))
 }
-func NewIVirtualizedItemProvider(obj uintptr) *IVirtualizedItemProvider {
+func NewIVirtualizedItemProvider(obj *IUnKnown) *IVirtualizedItemProvider {
 	return newIVirtualizedItemProvider(obj)
 }
 func (v *IVirtualizedItemProvider) Realize() error {
@@ -2229,10 +2189,10 @@ type IWindowProviderVtbl struct {
 	WaitForInputIdle           uintptr
 }
 
-func newIWindowProvider(obj uintptr) *IWindowProvider {
+func newIWindowProvider(obj *IUnKnown) *IWindowProvider {
 	return (*IWindowProvider)(unsafe.Pointer(obj))
 }
-func NewIWindowProvider(obj uintptr) *IWindowProvider {
+func NewIWindowProvider(obj *IUnKnown) *IWindowProvider {
 	return newIWindowProvider(obj)
 }
 func (v *IWindowProvider) Close() error {
@@ -2322,4 +2282,33 @@ func (v *IWindowProvider) WaitForInputIdle(in int32) (int32, error) {
 		return -1, HResult(ret)
 	}
 	return retVal, nil
+}
+
+type IUIAutomationPropertyChangedEventHandler struct {
+	vtbl *IUnKnown
+}
+type IUIAutomationPropertyChangedEventHandlerVtbl struct {
+	*IUnKnownVtbl
+	HandlePropertyChangedEvent uintptr
+}
+
+func newHandlePropertyChangedEvent(obj *IUnKnown) *IUIAutomationPropertyChangedEventHandler {
+	return (*IUIAutomationPropertyChangedEventHandler)(unsafe.Pointer(obj))
+}
+func NewIUIAutomationPropertyChangedEventHandler(obj *IUnKnown) *IUIAutomationPropertyChangedEventHandler {
+	return newHandlePropertyChangedEvent(obj)
+}
+
+func (v *IUIAutomationPropertyChangedEventHandler) HandlePropertyChangedEvent(in *IUIAutomationElement, in2 PropertyId, in3 VARIANT) error {
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationPropertyChangedEventHandlerVtbl)(unsafe.Pointer(v.vtbl)).HandlePropertyChangedEvent,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(in)),
+		uintptr(in2),
+		uintptr(unsafe.Pointer(&in3)),
+	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
 }

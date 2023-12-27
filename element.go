@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	oleAut            = syscall.NewLazyDLL("OleAut32.dll")
-	procSysFreeString = oleAut.NewProc("SysFreeString")
+	oleAut             = syscall.NewLazyDLL("OleAut32.dll")
+	procSysFreeString  = oleAut.NewProc("SysFreeString")
+	procSysAllocString = oleAut.NewProc("SysAllocString")
 )
 
 type Element struct {
@@ -23,7 +24,7 @@ type Element struct {
 	CurrentBoundingRectangle    *TagRect
 	CurrentClassName            string
 	CurrentControllerFor        *IUIAutomationElementArray
-	CurrentControlType          syscall.GUID
+	CurrentControlType          ControlTypeId
 	CurrentCulture              int32
 	CurrentDescribedBy          *IUIAutomationElementArray
 	CurrentFlowsTo              *IUIAutomationElementArray
@@ -44,7 +45,7 @@ type Element struct {
 	CurrentLocalizedControlType string
 	CurrentName                 string
 	CurrentNativeWindowHandle   uintptr
-	CurrentOrientation          *OrientationType
+	CurrentOrientation          OrientationType
 	CurrentProcessId            int32
 	CurrentProviderDescription  string
 
@@ -286,6 +287,21 @@ func FindElems(elem *Element, searchFunc SearchFunc) (elems []*Element) {
 
 func bstr2str(bstr uintptr) string {
 	return syscall.UTF16ToString((*[1 << 30]uint16)(unsafe.Pointer(bstr))[:])
+}
+
+func string2Bstr(str string) (uintptr, error) {
+	// 将Go字符串转换为UTF-16编码
+	utf16Str, err := syscall.UTF16PtrFromString(str)
+	if err != nil {
+		return 0, err
+	}
+	bstrPtr, _, _ := procSysAllocString.Call(
+		uintptr(unsafe.Pointer(utf16Str)),
+	)
+	if bstrPtr == 0 {
+		return 0, ErrorBstrPointerNil
+	}
+	return bstrPtr, nil
 }
 
 func TraverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Element {

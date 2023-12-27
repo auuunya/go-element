@@ -247,7 +247,7 @@ func (v *IUIAutomationElement) GetCurrentPatternAs(patternId PatternId, riid sys
 	}
 	return retVal, nil
 }
-func (v *IUIAutomationElement) GetCurrentPropertyValue(id PROPERTYID) (*VARIANT, error) {
+func (v *IUIAutomationElement) GetCurrentPropertyValue(id PropertyId) (*VARIANT, error) {
 	var retVal *VARIANT
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).GetCurrentPropertyValue,
@@ -260,7 +260,7 @@ func (v *IUIAutomationElement) GetCurrentPropertyValue(id PROPERTYID) (*VARIANT,
 	}
 	return retVal, nil
 }
-func (v *IUIAutomationElement) GetCurrentPropertyValueEx(id PROPERTYID, defaultVal int32) (*VARIANT, error) {
+func (v *IUIAutomationElement) GetCurrentPropertyValueEx(id PropertyId, defaultVal int32) (*VARIANT, error) {
 	var retVal *VARIANT
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).GetCurrentPropertyValue,
@@ -413,8 +413,8 @@ func (v *IUIAutomationElement) Get_CurrentControllerFor() *IUIAutomationElementA
 	return retVal
 }
 
-func (v *IUIAutomationElement) Get_CurrentControlType() syscall.GUID {
-	var retVal syscall.GUID
+func (v *IUIAutomationElement) Get_CurrentControlType() ControlTypeId {
+	var retVal ControlTypeId
 	syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CurrentControlType,
 		uintptr(unsafe.Pointer(v)),
@@ -654,8 +654,8 @@ func (v *IUIAutomationElement) Get_CurrentNativeWindowHandle() uintptr {
 	)
 	return retVal
 }
-func (v *IUIAutomationElement) Get_CurrentOrientation() *OrientationType {
-	var retVal *OrientationType
+func (v *IUIAutomationElement) Get_CurrentOrientation() OrientationType {
+	var retVal OrientationType
 	syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CurrentOrientation,
 		uintptr(unsafe.Pointer(v)),

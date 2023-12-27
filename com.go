@@ -23,38 +23,6 @@ var (
 	IID_IUIAutomation   = &syscall.GUID{0x30cbe57d, 0xd9d0, 0x452a, [8]byte{0xab, 0x13, 0x7a, 0xc5, 0xac, 0x48, 0x25, 0xee}}
 )
 
-var (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
-	CLSCTX_INPROC_SERVER                   = 0x1
-	CLSCTX_INPROC_HANDLER                  = 0x2
-	CLSCTX_LOCAL_SERVER                    = 0x4
-	CLSCTX_INPROC_SERVER16                 = 0x8
-	CLSCTX_REMOTE_SERVER                   = 0x10
-	CLSCTX_INPROC_HANDLER16                = 0x20
-	CLSCTX_RESERVED1                       = 0x40
-	CLSCTX_RESERVED2                       = 0x80
-	CLSCTX_RESERVED3                       = 0x100
-	CLSCTX_RESERVED4                       = 0x200
-	CLSCTX_NO_CODE_DOWNLOAD                = 0x400
-	CLSCTX_RESERVED5                       = 0x800
-	CLSCTX_NO_CUSTOM_MARSHAL               = 0x1000
-	CLSCTX_ENABLE_CODE_DOWNLOAD            = 0x2000
-	CLSCTX_NO_FAILURE_LOG                  = 0x4000
-	CLSCTX_DISABLE_AAA                     = 0x8000
-	CLSCTX_ENABLE_AAA                      = 0x10000
-	CLSCTX_FROM_DEFAULT_CONTEXT            = 0x20000
-	CLSCTX_ACTIVATE_X86_SERVER             = 0x40000
-	_CLSCTX_ACTIVATE_32_BIT_SERVER         = 0
-	CLSCTX_ACTIVATE_64_BIT_SERVER          = 0x80000
-	CLSCTX_ENABLE_CLOAKING                 = 0x100000
-	CLSCTX_APPCONTAINER                    = 0x400000
-	CLSCTX_ACTIVATE_AAA_AS_IU              = 0x800000
-	CLSCTX_RESERVED6                       = 0x1000000
-	CLSCTX_ACTIVATE_ARM32_SERVER           = 0x2000000
-	_CLSCTX_ALLOW_LOWER_TRUST_REGISTRATION = 0
-	CLSCTX_PS_DLL                          = 0x80000000
-)
-
 func StringToCharPtr(str string) *uint8 {
 	return stringToCharPtr(str)
 }
@@ -80,17 +48,21 @@ func CoUninitialize() {
 	procCoUninitialize.Call()
 }
 
-func CreateInstance() (unsafe.Pointer, error) {
-	return createInstance()
+func CreateUiautomationInstance() (unsafe.Pointer, error) {
+	return createInstance(CLSID_CUIAutomation, IID_IUIAutomation, CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER)
 }
 
-func createInstance() (unsafe.Pointer, error) {
+func CreateInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
+	return createInstance(clsid, riid, clsctx)
+}
+
+func createInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
 	var retVal unsafe.Pointer
 	ret, _, _ := procCoCreateInstance.Call(
-		uintptr(unsafe.Pointer(CLSID_CUIAutomation)),
+		uintptr(unsafe.Pointer(clsid)),
 		uintptr(0),
-		uintptr(CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER),
-		uintptr(unsafe.Pointer(IID_IUIAutomation)),
+		uintptr(clsctx),
+		uintptr(unsafe.Pointer(riid)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {
