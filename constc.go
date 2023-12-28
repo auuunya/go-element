@@ -379,3 +379,22 @@ type UiaRect struct {
 	Width  float64
 	Height float64
 }
+
+type PropertyConditionFlags int
+
+const (
+	PropertyConditionFlags_None           PropertyConditionFlags = 0
+	PropertyConditionFlags_IgnoreCase     PropertyConditionFlags = 0x1
+	PropertyConditionFlags_MatchSubstring PropertyConditionFlags = 0x2
+)
+
+type StructureChangeType int
+
+const (
+	StructureChangeType_ChildAdded StructureChangeType = iota
+	StructureChangeType_ChildRemoved
+	StructureChangeType_ChildrenInvalidated
+	StructureChangeType_ChildrenBulkAdded
+	StructureChangeType_ChildrenBulkRemoved
+	StructureChangeType_ChildrenReordered
+)

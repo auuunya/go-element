@@ -1,3 +1,4 @@
 _.go
 example
 .DS_Store
+cmd.go
