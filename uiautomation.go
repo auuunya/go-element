@@ -68,11 +68,11 @@ type IUIAutomationVtbl struct {
 	ElementFromIAccessibleBuildCache          uintptr
 }
 
-func newIUIAutomation(obj uintptr) *IUIAutomation {
-	return (*IUIAutomation)(unsafe.Pointer(obj))
+func newIUIAutomation(unk *IUnKnown) *IUIAutomation {
+	return (*IUIAutomation)(unsafe.Pointer(unk))
 }
-func NewIUIAutomation(obj uintptr) *IUIAutomation {
-	return newIUIAutomation(obj)
+func NewIUIAutomation(unk *IUnKnown) *IUIAutomation {
+	return newIUIAutomation(unk)
 }
 
 func ElementFromHandle(v *IUIAutomation, hwnd uintptr) (*IUIAutomationElement, error) {
@@ -199,11 +199,11 @@ type IUIAutomationElementVtbl struct {
 	GetClickablePoint               uintptr
 }
 
-func newIUIAutomationElement(obj uintptr) *IUIAutomationElement {
-	return (*IUIAutomationElement)(unsafe.Pointer(obj))
+func newIUIAutomationElement(unk *IUnKnown) *IUIAutomationElement {
+	return (*IUIAutomationElement)(unsafe.Pointer(unk))
 }
-func NewIUIAutomationElement(obj uintptr) *IUIAutomationElement {
-	return newIUIAutomationElement(obj)
+func NewIUIAutomationElement(unk *IUnKnown) *IUIAutomationElement {
+	return newIUIAutomationElement(unk)
 }
 
 func (v *IUIAutomationElement) GetClickablePoint() (*TagPoint, int32, error) {
@@ -751,11 +751,11 @@ type IUIAutomationElementArrayVtbl struct {
 	GetElement uintptr
 }
 
-func newIUIAutomationElementArray(obj uintptr) *IUIAutomationElementArray {
-	return (*IUIAutomationElementArray)(unsafe.Pointer(obj))
+func newIUIAutomationElementArray(unk *IUnKnown) *IUIAutomationElementArray {
+	return (*IUIAutomationElementArray)(unsafe.Pointer(unk))
 }
-func NewIUIAutomationElementArray(obj uintptr) *IUIAutomationElementArray {
-	return newIUIAutomationElementArray(obj)
+func NewIUIAutomationElementArray(unk *IUnKnown) *IUIAutomationElementArray {
+	return newIUIAutomationElementArray(unk)
 }
 
 func (v *IUIAutomationElementArray) Get_Length() int32 {

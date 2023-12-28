@@ -58,6 +58,9 @@ func NewElement(uiaumation *IUIAutomationElement) *Element {
 	}
 }
 func (e *Element) FormatString() string {
+	if e == nil {
+		return ""
+	}
 	elemType := reflect.TypeOf(e)
 	if elemType.Kind() == reflect.Ptr {
 		elemType = elemType.Elem()
@@ -262,6 +265,9 @@ func (e *Element) ProviderDescription() error {
 type SearchFunc func(elem *Element) bool
 
 func SearchElem(elem *Element, searchFunc SearchFunc) *Element {
+	if elem == nil || searchFunc == nil {
+		return nil
+	}
 	if searchFunc(elem) {
 		return elem
 	}

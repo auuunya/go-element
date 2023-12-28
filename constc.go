@@ -262,6 +262,7 @@ type PatternId int
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-controlpattern-ids
+	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-controlsupport
 	UIA_AnnotationPatternId        PatternId = 10023
 	UIA_CustomNavigationPatternId  PatternId = 10033
 	UIA_DockPatternId              PatternId = 10011
@@ -345,3 +346,36 @@ const (
 	UIA_TreeItemControlTypeId     ControlTypeId = 50024
 	UIA_WindowControlTypeId       ControlTypeId = 50032
 )
+
+type TagDvTargetDevice struct {
+	TdSize             uint32
+	TdDriverNameOffset uint16
+	TdDeviceNameOffset uint16
+	TdPortNameOffset   uint16
+	TdExtDevmodeOffset uint16
+	TdData             [1]byte
+}
+type TagDvAspect int
+
+const (
+	DVASPECT_CONTENT   TagDvAspect = 1
+	DVASPECT_THUMBNAIL TagDvAspect = 2
+	DVASPECT_ICON      TagDvAspect = 4
+	DVASPECT_DOCPRINT  TagDvAspect = 8
+)
+
+type TxtHitResult int
+
+const (
+	TXTHITRESULT_NOHIT TxtHitResult = iota
+	TXTHITRESULT_TRANSPARENT
+	TXTHITRESULT_CLOSE
+	TXTHITRESULT_HIT
+)
+
+type UiaRect struct {
+	Left   float64
+	Top    float64
+	Width  float64
+	Height float64
+}

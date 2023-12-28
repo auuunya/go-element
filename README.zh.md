@@ -1,15 +1,15 @@
-## Uiautomation Library for Windows in Go
+## 用于在Go中进行Windows窗体UI自动化的Uiautomation库
 [![Go Reference](https://pkg.go.dev/badge/github.com/auuunya/go-element.svg)](https://pkg.go.dev/github.com/auuunya/go-element)
 
-### Overview
-This Go library provides a convenient interface for automating UI tasks on Windows using the UI Automation framework. It allows you to interact with and manipulate UI elements in applications through the corresponding Windows COM interfaces. The library maps Go methods to the methods defined in the COM interfaces, making it easy to work with UI Automation in a Go application.
+### 概述
+该库为使用UI自动化框架在Windows上自动执行UI方法提供了一个方便的接口。它允许您通过相应的Windows COM接口与应用程序中的UI元素控件进行交互和操作。该库可将Go方法映射到COM接口中定义的方法，从而轻松在Go应用程序中使用UI自动化.
 
-### Features
-- **COM Interface Mapping:** The library mirrors the structure of UI Automation COM interfaces, Corresponds to the Windows API structure
-- **Element Structuring:** The structure of the application's UI elements can be visualized more intuitively
-- **Automation:** Perform UI automation tasks programmatically, such as reading or manipulating the state of UI controls.
+### 特性
+- **COM接口映射:** 该库反映了用户界面自动化COM接口的结构，与 Windows API 结构相对应
+- **元素结构化:** 可更直观地显示应用程序用户界面元素的结构
+- **Automation:** 以编程方式执行用户界面自动化任务，如读取或操作UI控件的状态。
 
-### Install
+### 安装
 ```shell
 go get -u github.com/auuunya/go-element
 ```
@@ -20,8 +20,8 @@ import (
 )
 ```
 
-### Examples:
-**Browser Element Structure Output**
+### 示例用法:
+**浏览器元素结构输出**
 ```go
 func main() {
 	uiautomation.CoInitialize()
@@ -36,7 +36,7 @@ func main() {
 }
 ```
 
-**Find all button controls in Notepad**
+**查找记事本所有的按钮控件**
 ```go
 func main() {
 	uiautomation.CoInitialize()
@@ -48,13 +48,13 @@ func main() {
 	root := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
 	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentName == "Button"
+		return elem.CurrentName == "按钮"
 	}
     foundAll := uiautomation.FindElems(elems, fn)
     fmt.Printf("foundAll elems: %v\n", foundAll)
 }
 ```
-**Search for controls specified in the folder**
+**搜索文件夹指定的控件**
 ```go
 func main() {
 	uiautomation.CoInitialize()
@@ -66,15 +66,15 @@ func main() {
 	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
 	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentClassName == "SelectorButton"
+		return elem.CurrentClassName == "SelectorButton" && elem.CurrentName == "详细信息"
 	}
 	foundElement := uiautomation.SearchElem(elems, fn)
 	fmt.Printf("foundElement: %v\n", foundElement)
 }
 ```
 
-### Contribution
-Contributions are welcome! If you find a bug or want to enhance the library, feel free to open an issue or submit a pull request.
+### 贡献
+欢迎贡献！如果您发现错误或想添加一些功能，请随时提出问题或提交拉取请求。
 
-### License
-This library is distributed under the MIT License
+### 许可证
+该库使用MIT许可证

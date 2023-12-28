@@ -14,13 +14,9 @@ var (
 	procCoInitialize     = ole32.NewProc("CoInitialize")
 	procCoUninitialize   = ole32.NewProc("CoUninitialize")
 	procFindWindowA      = user32.NewProc("FindWindowA")
+	procFindWindowExA    = user32.NewProc("FindWindowExA")
 
 	ErrorNotFoundWindow = errors.New("not found window")
-)
-
-var (
-	CLSID_CUIAutomation = &syscall.GUID{0xff48dba4, 0x60ef, 0x4201, [8]byte{0xaa, 0x87, 0x54, 0x10, 0x3e, 0xef, 0x59, 0x4e}}
-	IID_IUIAutomation   = &syscall.GUID{0x30cbe57d, 0xd9d0, 0x452a, [8]byte{0xab, 0x13, 0x7a, 0xc5, 0xac, 0x48, 0x25, 0xee}}
 )
 
 func StringToCharPtr(str string) *uint8 {
@@ -48,12 +44,15 @@ func CoUninitialize() {
 	procCoUninitialize.Call()
 }
 
-func CreateUiautomationInstance() (unsafe.Pointer, error) {
-	return createInstance(CLSID_CUIAutomation, IID_IUIAutomation, CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER)
-}
-
 func CreateInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
 	return createInstance(clsid, riid, clsctx)
+}
+
+func FindWindowA(lpclass, lpwindow string) uintptr {
+	return findWindowA(lpclass, lpwindow)
+}
+func FindWindowExA(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
+	return findWindowExA(phwdn, chwdn, lpclass, lpwindow)
 }
 
 func createInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
@@ -85,6 +84,24 @@ func findWindowA(lpclass, lpwindow string) uintptr {
 		lpwindowname = uintptr(unsafe.Pointer(stringToCharPtr(lpwindow)))
 	}
 	ret, _, _ := procFindWindowA.Call(
+		lpclassname,
+		lpwindowname,
+	)
+	return ret
+}
+
+func findWindowExA(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
+	lpclassname := uintptr(0)
+	lpwindowname := uintptr(0)
+	if lpclass != "" {
+		lpclassname = uintptr(unsafe.Pointer(stringToCharPtr(lpclass)))
+	}
+	if lpwindow != "" {
+		lpwindowname = uintptr(unsafe.Pointer(stringToCharPtr(lpwindow)))
+	}
+	ret, _, _ := procFindWindowA.Call(
+		phwdn,
+		chwdn,
 		lpclassname,
 		lpwindowname,
 	)

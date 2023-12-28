@@ -29,3 +29,34 @@ type IAccessibleVtbl struct {
 	Put_accName             uintptr
 	Put_accValue            uintptr
 }
+
+type IUIAutomationLegacyIAccessiblePattern struct {
+	vtbl *IUnKnown
+}
+type IUIAutomationLegacyIAccessiblePatternVtbl struct {
+	IUnKnownVtbl
+	DoDefaultAction             uintptr
+	Get_CachedChildId           uintptr
+	Get_CachedDefaultAction     uintptr
+	Get_CachedDescription       uintptr
+	Get_CachedHelp              uintptr
+	Get_CachedKeyboardShortcut  uintptr
+	Get_CachedName              uintptr
+	Get_CachedRole              uintptr
+	Get_CachedState             uintptr
+	Get_CachedValue             uintptr
+	Get_CurrentChildId          uintptr
+	Get_CurrentDefaultAction    uintptr
+	Get_CurrentDescription      uintptr
+	Get_CurrentHelp             uintptr
+	Get_CurrentKeyboardShortcut uintptr
+	Get_CurrentName             uintptr
+	Get_CurrentRole             uintptr
+	Get_CurrentState            uintptr
+	Get_CurrentValue            uintptr
+	GetCachedSelection          uintptr
+	GetCurrentSelection         uintptr
+	GetIAccessible              uintptr
+	Select                      uintptr
+	SetValue                    uintptr
+}

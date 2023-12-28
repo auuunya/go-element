@@ -16,8 +16,8 @@ type IUnKnownVtbl struct {
 	Release        uintptr
 }
 
-func NewIUnKnown() *IUnKnown {
-	return &IUnKnown{}
+func NewIUnKnown(v unsafe.Pointer) *IUnKnown {
+	return (*IUnKnown)(unsafe.Pointer(v))
 }
 
 func AddRef(v *IUnKnown) uint32 {
