@@ -50,8 +50,8 @@ func main() {
 	fn := func(elem *uiautomation.Element) bool {
 		return elem.CurrentName == "按钮"
 	}
-    foundAll := uiautomation.FindElems(elems, fn)
-    fmt.Printf("foundAll elems: %v\n", foundAll)
+	foundAll := uiautomation.FindElems(elems, fn)
+	fmt.Printf("foundAll elems: %v\n", foundAll)
 }
 ```
 **搜索文件夹指定的控件**

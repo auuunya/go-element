@@ -50,8 +50,8 @@ func main() {
 	fn := func(elem *uiautomation.Element) bool {
 		return elem.CurrentName == "Button"
 	}
-    foundAll := uiautomation.FindElems(elems, fn)
-    fmt.Printf("foundAll elems: %v\n", foundAll)
+	foundAll := uiautomation.FindElems(elems, fn)
+	fmt.Printf("foundAll elems: %v\n", foundAll)
 }
 ```
 **Search for controls specified in the folder**
