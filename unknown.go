@@ -35,12 +35,12 @@ func Release(v *IUnKnown) uint32 {
 	return uint32(ret)
 }
 
-func QueryInterface(v *IUnKnown, riid syscall.GUID) (unsafe.Pointer, error) {
+func QueryInterface(v *IUnKnown, riid *syscall.GUID) (unsafe.Pointer, error) {
 	var retVal unsafe.Pointer
 	ret, _, _ := syscall.SyscallN(
 		(*IUnKnownVtbl)(unsafe.Pointer(v.Vtbl)).QueryInterface,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(unsafe.Pointer(&riid)),
+		uintptr(unsafe.Pointer(riid)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {

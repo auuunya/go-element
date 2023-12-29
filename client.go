@@ -17,6 +17,7 @@ type IUIAutomationValuePatternVtbl struct {
 	SetValue              uintptr
 }
 
+// TODO:: clent IUIAutomationValuePattern method
 func PatternSetValue(pointer unsafe.Pointer, in string) error {
 	v := (*IUIAutomationValuePattern)(unsafe.Pointer(pointer))
 	retVal, err := string2Bstr(in)

@@ -607,11 +607,12 @@ func (v *IUIAutomation) GetPatternProgrammaticName(in PatternId) (string, error)
 	if ret != 0 {
 		return "", HResult(ret)
 	}
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysAllocString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IUIAutomation) GetPropertyProgrammaticName(in PropertyId) (string, error) {
@@ -625,11 +626,12 @@ func (v *IUIAutomation) GetPropertyProgrammaticName(in PropertyId) (string, erro
 	if ret != 0 {
 		return "", HResult(ret)
 	}
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysAllocString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IUIAutomation) GetRootElement() (*IUIAutomationElement, error) {
@@ -964,13 +966,13 @@ func (v *IUIAutomationElement) GetCurrentPattern(patternId PatternId) (*IUnKnown
 	}
 	return retVal, nil
 }
-func (v *IUIAutomationElement) GetCurrentPatternAs(patternId PatternId, riid syscall.GUID) (unsafe.Pointer, error) {
+func (v *IUIAutomationElement) GetCurrentPatternAs(patternId PatternId, riid *syscall.GUID) (unsafe.Pointer, error) {
 	var retVal unsafe.Pointer
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).GetCurrentPatternAs,
 		uintptr(unsafe.Pointer(v)),
 		uintptr(patternId),
-		uintptr(unsafe.Pointer(&riid)),
+		uintptr(unsafe.Pointer(riid)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {
@@ -1034,13 +1036,12 @@ func (v *IUIAutomationElement) Get_CurrentAcceleratorKey() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentAccessKey() (string, error) {
@@ -1050,13 +1051,12 @@ func (v *IUIAutomationElement) Get_CurrentAccessKey() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentAriaProperties() (string, error) {
@@ -1066,13 +1066,12 @@ func (v *IUIAutomationElement) Get_CurrentAriaProperties() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentAriaRole() (string, error) {
@@ -1082,13 +1081,12 @@ func (v *IUIAutomationElement) Get_CurrentAriaRole() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentAutomationId() (string, error) {
@@ -1098,13 +1096,12 @@ func (v *IUIAutomationElement) Get_CurrentAutomationId() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentBoundingRectangle() *TagRect {
@@ -1124,13 +1121,12 @@ func (v *IUIAutomationElement) Get_CurrentClassName() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 
@@ -1191,13 +1187,12 @@ func (v *IUIAutomationElement) Get_CurrentFrameworkId() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 
@@ -1218,13 +1213,12 @@ func (v *IUIAutomationElement) Get_CurrentHelpText() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(
-		uintptr(bstr),
-	)
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentIsControlElement() int32 {
@@ -1314,11 +1308,12 @@ func (v *IUIAutomationElement) Get_CurrentItemStatus() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1329,11 +1324,12 @@ func (v *IUIAutomationElement) Get_CurrentItemType() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1354,11 +1350,12 @@ func (v *IUIAutomationElement) Get_CurrentLocalizedControlType() (string, error)
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1369,11 +1366,12 @@ func (v *IUIAutomationElement) Get_CurrentName() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentNativeWindowHandle() uintptr {
@@ -1410,11 +1408,12 @@ func (v *IUIAutomationElement) Get_CurrentProviderDescription() (string, error) 
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1646,11 +1645,12 @@ func (v *IUIAutomationProxyFactory) Get_ProxyFactoryId() (string, error) {
 	if ret != 0 {
 		return "", HResult(ret)
 	}
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysAllocString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1705,11 +1705,12 @@ func (v *IUIAutomationProxyFactoryEntry) Get_ClassName() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysAllocString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IUIAutomationProxyFactoryEntry) Get_ImageName() (string, error) {
@@ -1719,11 +1720,12 @@ func (v *IUIAutomationProxyFactoryEntry) Get_ImageName() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysAllocString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IUIAutomationProxyFactoryEntry) Get_NeedsAdviseEvents() int32 {

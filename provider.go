@@ -58,11 +58,11 @@ func (v *IAnnotationProvider) Get_AnnotationTypeName() string {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return ""
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal
 }
 func (v *IAnnotationProvider) Get_Author() string {
@@ -72,11 +72,11 @@ func (v *IAnnotationProvider) Get_Author() string {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return ""
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal
 }
 func (v *IAnnotationProvider) Get_DateTime() string {
@@ -86,11 +86,11 @@ func (v *IAnnotationProvider) Get_DateTime() string {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return ""
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal
 }
 func (v *IAnnotationProvider) Get_Target() *IRawElementProviderSimple {
@@ -180,11 +180,11 @@ func (v *IDragProvider) Get_DropEffect() string {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return ""
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal
 }
 func (v *IDragProvider) Get_DropEffects() *TagSafeArray {
@@ -237,11 +237,11 @@ func (v *IDropTargetProvider) Get_DropTargetEffect() string {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return ""
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal
 }
 func (v *IDropTargetProvider) Get_DropTargetEffects() *TagSafeArray {
@@ -529,11 +529,12 @@ func (v *ILegacyIAccessibleProvider) Get_DefaultAction() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ILegacyIAccessibleProvider) Get_Description() (string, error) {
@@ -543,11 +544,12 @@ func (v *ILegacyIAccessibleProvider) Get_Description() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ILegacyIAccessibleProvider) Get_Help() (string, error) {
@@ -557,11 +559,12 @@ func (v *ILegacyIAccessibleProvider) Get_Help() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ILegacyIAccessibleProvider) Get_KeyboardShortcut() (string, error) {
@@ -571,11 +574,12 @@ func (v *ILegacyIAccessibleProvider) Get_KeyboardShortcut() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ILegacyIAccessibleProvider) Get_Name() (string, error) {
@@ -585,11 +589,12 @@ func (v *ILegacyIAccessibleProvider) Get_Name() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ILegacyIAccessibleProvider) Get_Role() uint32 {
@@ -643,16 +648,6 @@ func (v *ILegacyIAccessibleProvider) GetSelection() (*TagSafeArray, error) {
 	}
 	return retVal, nil
 }
-
-var (
-	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/selflag
-	SELFLAG_NONE            = 0
-	SELFLAG_TAKEFOCUS       = 0x1
-	SELFLAG_TAKESELECTION   = 0x2
-	SELFLAG_EXTENDSELECTION = 0x4
-	SELFLAG_ADDSELECTION    = 0x8
-	SELFLAG_REMOVESELECTION = 0x10
-)
 
 func (v *ILegacyIAccessibleProvider) Select(flag int32) error {
 	ret, _, _ := syscall.SyscallN(
@@ -730,11 +725,12 @@ func (v *IMultipleViewProvider) GetViewName(viewId int32) (string, error) {
 	if ret != 0 {
 		return "", HResult(ret)
 	}
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IMultipleViewProvider) SetCurrentView(viewId int32) error {
@@ -1159,11 +1155,12 @@ func (v *ISpreadsheetItemProvider) Get_Formula() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ISpreadsheetItemProvider) GetAnnotationObjects() (*TagSafeArray, error) {
@@ -1219,11 +1216,12 @@ func (v *IStylesProvider) Get_ExtendedPropertvs() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IStylesProvider) Get_FillColor() int32 {
@@ -1251,11 +1249,12 @@ func (v *IStylesProvider) Get_FillPatternStyle() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IStylesProvider) Get_Shape() (string, error) {
@@ -1265,11 +1264,12 @@ func (v *IStylesProvider) Get_Shape() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IStylesProvider) Get_StyleId() int32 {
@@ -1288,11 +1288,12 @@ func (v *IStylesProvider) Get_StyleName() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 
@@ -1644,11 +1645,12 @@ func (v *ITextRangeProvider) GetText(in int32) (string, error) {
 	if ret != 0 {
 		return "", HResult(ret)
 	}
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *ITextRangeProvider) Move(in TextUnit, in2 int32) (int32, error) {
@@ -2125,11 +2127,12 @@ func (v *IValueProvider) Get_Value() (string, error) {
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
-	if bstr == 0 {
-		return "", ErrorBstrPointerNil
+
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysAllocString.Call(uintptr(bstr))
 	}
-	retVal := bstr2str(bstr)
-	procSysFreeString.Call(uintptr(bstr))
 	return retVal, nil
 }
 func (v *IValueProvider) SetValue(in string) error {

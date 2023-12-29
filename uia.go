@@ -1,201 +1,5 @@
 package uiautomation
 
-type CLSCTX int
-
-var (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
-	CLSCTX_INPROC_SERVER                   CLSCTX = 0x1
-	CLSCTX_INPROC_HANDLER                  CLSCTX = 0x2
-	CLSCTX_LOCAL_SERVER                    CLSCTX = 0x4
-	CLSCTX_INPROC_SERVER16                 CLSCTX = 0x8
-	CLSCTX_REMOTE_SERVER                   CLSCTX = 0x10
-	CLSCTX_INPROC_HANDLER16                CLSCTX = 0x20
-	CLSCTX_RESERVED1                       CLSCTX = 0x40
-	CLSCTX_RESERVED2                       CLSCTX = 0x80
-	CLSCTX_RESERVED3                       CLSCTX = 0x100
-	CLSCTX_RESERVED4                       CLSCTX = 0x200
-	CLSCTX_NO_CODE_DOWNLOAD                CLSCTX = 0x400
-	CLSCTX_RESERVED5                       CLSCTX = 0x800
-	CLSCTX_NO_CUSTOM_MARSHAL               CLSCTX = 0x1000
-	CLSCTX_ENABLE_CODE_DOWNLOAD            CLSCTX = 0x2000
-	CLSCTX_NO_FAILURE_LOG                  CLSCTX = 0x4000
-	CLSCTX_DISABLE_AAA                     CLSCTX = 0x8000
-	CLSCTX_ENABLE_AAA                      CLSCTX = 0x10000
-	CLSCTX_FROM_DEFAULT_CONTEXT            CLSCTX = 0x20000
-	CLSCTX_ACTIVATE_X86_SERVER             CLSCTX = 0x40000
-	_CLSCTX_ACTIVATE_32_BIT_SERVER         CLSCTX = 0
-	CLSCTX_ACTIVATE_64_BIT_SERVER          CLSCTX = 0x80000
-	CLSCTX_ENABLE_CLOAKING                 CLSCTX = 0x100000
-	CLSCTX_APPCONTAINER                    CLSCTX = 0x400000
-	CLSCTX_ACTIVATE_AAA_AS_IU              CLSCTX = 0x800000
-	CLSCTX_RESERVED6                       CLSCTX = 0x1000000
-	CLSCTX_ACTIVATE_ARM32_SERVER           CLSCTX = 0x2000000
-	_CLSCTX_ALLOW_LOWER_TRUST_REGISTRATION CLSCTX = 0
-	CLSCTX_PS_DLL                          CLSCTX = 0x80000000
-)
-
-type OrientationType int
-
-const (
-	OrientationType_None OrientationType = iota
-	OrientationType_Horizontal
-	OrientationType_Vertical
-)
-
-type TagPoint struct {
-	X int32
-	Y int32
-}
-
-type TagRect struct {
-	Left   int32
-	Top    int32
-	Right  int32
-	Bottom int32
-}
-
-type TagSafeArrayBound struct {
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/oaidl/ns-oaidl-safearraybound
-	CElements uint32
-	LLbound   int32
-}
-type TagSafeArray struct {
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/oaidl/ns-oaidl-safearray
-	CbElement uint32
-	CDims     uint16
-	CLocks    uint32
-	FFeatures uint16
-	PvData    uintptr
-	Rgsabound []TagSafeArrayBound
-}
-
-type TreeScope int
-
-var (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationclient/ne-uiautomationclient-treescope
-	TreeScope_None        TreeScope = 0x0
-	TreeScope_Element     TreeScope = 0x1
-	TreeScope_Children    TreeScope = 0x2
-	TreeScope_Descendants TreeScope = 0x4
-	TreeScope_Parent      TreeScope = 0x8
-	TreeScope_Ancestors   TreeScope = 0x10
-	TreeScope_Subtree     TreeScope = TreeScope_Element | TreeScope_Children | TreeScope_Descendants
-)
-
-type ScrollAmount int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-scrollamount
-	ScrollAmount_LargeDecrement ScrollAmount = iota
-	ScrollAmount_SmallDecrement
-	ScrollAmount_NoAmount
-	ScrollAmount_LargeIncrement
-	ScrollAmount_SmallIncrement
-)
-
-type SynchronizedInputType int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-synchronizedinputtype
-	SynchronizedInputType_KeyUp          SynchronizedInputType = 0x1
-	SynchronizedInputType_KeyDown        SynchronizedInputType = 0x2
-	SynchronizedInputType_LeftMouseUp    SynchronizedInputType = 0x4
-	SynchronizedInputType_LeftMouseDown  SynchronizedInputType = 0x8
-	SynchronizedInputType_RightMouseUp   SynchronizedInputType = 0x10
-	SynchronizedInputType_RightMouseDown SynchronizedInputType = 0x20
-)
-
-type RowOrColumnMajor int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-roworcolumnmajor
-	RowOrColumnMajor_RowMajor RowOrColumnMajor = iota
-	RowOrColumnMajor_ColumnMajor
-	RowOrColumnMajor_Indeterminate
-)
-
-type TextPatternRangeEndpoint int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-textpatternrangeendpoint
-	TextPatternRangeEndpoint_Start TextPatternRangeEndpoint = iota
-	TextPatternRangeEndpoint_End
-)
-
-type TextUnit int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-textunit
-	TextUnit_Character TextUnit = iota
-	TextUnit_Format
-	TextUnit_Word
-	TextUnit_Line
-	TextUnit_Paragraph
-	TextUnit_Page
-	TextUnit_Document
-)
-
-type TextArrtibuteId int
-
-const (
-// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-textattribute-ids
-)
-
-type SupportedTextSelection int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-supportedtextselection
-	SupportedTextSelection_None SupportedTextSelection = iota
-	SupportedTextSelection_Single
-	SupportedTextSelection_Multiple
-)
-
-type UiaPoint struct {
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ns-uiautomationcore-uiapoint
-	X float64
-	Y float64
-}
-
-type ToggleState int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-togglestate
-	ToggleState_Off ToggleState = iota
-	ToggleState_On
-	ToggleState_Indeterminate
-)
-
-type ZoomUnit int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-zoomunit
-	ZoomUnit_NoAmount ZoomUnit = iota
-	ZoomUnit_LargeDecrement
-	ZoomUnit_SmallDecrement
-	ZoomUnit_LargeIncrement
-	ZoomUnit_SmallIncrement
-)
-
-type WindowInteractionState int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-windowinteractionstate
-	WindowInteractionState_Running WindowInteractionState = iota
-	WindowInteractionState_Closing
-	WindowInteractionState_ReadyForUserInteraction
-	WindowInteractionState_BlockedByModalWindow
-	WindowInteractionState_NotResponding
-)
-
-type WindowVisualState int
-
-const (
-	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-windowvisualstate
-	WindowVisualState_Normal WindowVisualState = iota
-	WindowVisualState_Maximized
-	WindowVisualState_Minimized
-)
-
 type PropertyId int
 
 const (
@@ -347,54 +151,44 @@ const (
 	UIA_WindowControlTypeId       ControlTypeId = 50032
 )
 
-type TagDvTargetDevice struct {
-	TdSize             uint32
-	TdDriverNameOffset uint16
-	TdDeviceNameOffset uint16
-	TdPortNameOffset   uint16
-	TdExtDevmodeOffset uint16
-	TdData             [1]byte
-}
-type TagDvAspect int
+type UIA_EventId int
 
 const (
-	DVASPECT_CONTENT   TagDvAspect = 1
-	DVASPECT_THUMBNAIL TagDvAspect = 2
-	DVASPECT_ICON      TagDvAspect = 4
-	DVASPECT_DOCPRINT  TagDvAspect = 8
-)
-
-type TxtHitResult int
-
-const (
-	TXTHITRESULT_NOHIT TxtHitResult = iota
-	TXTHITRESULT_TRANSPARENT
-	TXTHITRESULT_CLOSE
-	TXTHITRESULT_HIT
-)
-
-type UiaRect struct {
-	Left   float64
-	Top    float64
-	Width  float64
-	Height float64
-}
-
-type PropertyConditionFlags int
-
-const (
-	PropertyConditionFlags_None           PropertyConditionFlags = 0
-	PropertyConditionFlags_IgnoreCase     PropertyConditionFlags = 0x1
-	PropertyConditionFlags_MatchSubstring PropertyConditionFlags = 0x2
-)
-
-type StructureChangeType int
-
-const (
-	StructureChangeType_ChildAdded StructureChangeType = iota
-	StructureChangeType_ChildRemoved
-	StructureChangeType_ChildrenInvalidated
-	StructureChangeType_ChildrenBulkAdded
-	StructureChangeType_ChildrenBulkRemoved
-	StructureChangeType_ChildrenReordered
+	UIA_ActiveTextPositionChangedEventId                 UIA_EventId = 20036
+	UIA_AsyncContentLoadedEventId                        UIA_EventId = 20006
+	UIA_AutomationFocusChangedEventId                    UIA_EventId = 20005
+	UIA_AutomationPropertyChangedEventId                 UIA_EventId = 20004
+	UIA_ChangesEventId                                   UIA_EventId = 20034
+	UIA_Drag_DragCancelEventId                           UIA_EventId = 20027
+	UIA_Drag_DragCompleteEventId                         UIA_EventId = 20028
+	UIA_Drag_DragStartEventId                            UIA_EventId = 20026
+	UIA_DropTarget_DragEnterEventId                      UIA_EventId = 20029
+	UIA_DropTarget_DragLeaveEventId                      UIA_EventId = 20030
+	UIA_DropTarget_DroppedEventId                        UIA_EventId = 20031
+	UIA_HostedFragmentRootsInvalidatedEventId            UIA_EventId = 20025
+	UIA_InputDiscardedEventId                            UIA_EventId = 20022
+	UIA_InputReachedOtherElementEventId                  UIA_EventId = 20021
+	UIA_InputReachedTargetEventId                        UIA_EventId = 20020
+	UIA_Invoke_InvokedEventId                            UIA_EventId = 20009
+	UIA_LayoutInvalidatedEventId                         UIA_EventId = 20008
+	UIA_LiveRegionChangedEventId                         UIA_EventId = 20024
+	UIA_MenuClosedEventId                                UIA_EventId = 20007
+	UIA_MenuModeEndEventId                               UIA_EventId = 20019
+	UIA_MenuModeStartEventId                             UIA_EventId = 20018
+	UIA_MenuOpenedEventId                                UIA_EventId = 20003
+	UIA_NotificationEventId                              UIA_EventId = 20035
+	UIA_Selection_InvalidatedEventId                     UIA_EventId = 20013
+	UIA_SelectionItem_ElementAddedToSelectionEventId     UIA_EventId = 20010
+	UIA_SelectionItem_ElementRemovedFromSelectionEventId UIA_EventId = 20011
+	UIA_SelectionItem_ElementSelectedEventId             UIA_EventId = 20012
+	UIA_StructureChangedEventId                          UIA_EventId = 20002
+	UIA_SystemAlertEventId                               UIA_EventId = 20023
+	UIA_Text_TextChangedEventId                          UIA_EventId = 20015
+	UIA_Text_TextSelectionChangedEventId                 UIA_EventId = 20014
+	UIA_TextEdit_ConversionTargetChangedEventId          UIA_EventId = 20033
+	UIA_TextEdit_TextChangedEventId                      UIA_EventId = 20032
+	UIA_ToolTipClosedEventId                             UIA_EventId = 20001
+	UIA_ToolTipOpenedEventId                             UIA_EventId = 20000
+	UIA_Window_WindowClosedEventId                       UIA_EventId = 20017
+	UIA_Window_WindowOpenedEventId                       UIA_EventId = 20016
 )
