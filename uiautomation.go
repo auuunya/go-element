@@ -1105,13 +1105,13 @@ func (v *IUIAutomationElement) Get_CurrentAutomationId() (string, error) {
 	return retVal, nil
 }
 func (v *IUIAutomationElement) Get_CurrentBoundingRectangle() *TagRect {
-	var retVal *TagRect
+	var retVal TagRect
 	syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CurrentBoundingRectangle,
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-	return retVal
+	return &retVal
 }
 
 func (v *IUIAutomationElement) Get_CurrentClassName() (string, error) {
