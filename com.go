@@ -2,6 +2,7 @@ package uiautomation
 
 import (
 	"errors"
+	"log"
 	"syscall"
 	"unsafe"
 )
@@ -26,7 +27,7 @@ func StringToCharPtr(str string) *uint8 {
 func GetWindowForString(classname, windowname string) uintptr {
 	find := findWindowA(classname, windowname)
 	if find == 0 {
-		panic(ErrorNotFoundWindow)
+		log.Fatal(ErrorNotFoundWindow)
 	}
 	return find
 }
