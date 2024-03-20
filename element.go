@@ -314,43 +314,24 @@ func TraverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Elem
 	return traverseUIElementTree(ppv, root)
 }
 
+const (
+	SetUIAutomation = "SetUIAutomation"
+)
+
 func traverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Element {
 	condition := CreateTrueCondition(ppv)
 	elementArr, _ := FindAll(root, condition)
 	arrLen := Get_Length(elementArr)
 	newElement := NewElement(root)
-	newElement.AccleratorKey()
-	newElement.AccessKey()
-	newElement.AriaProperties()
-	newElement.AriaRole()
-	newElement.AutomationId()
-	newElement.BoundingRectangle()
-	newElement.ClassName()
-	newElement.ControllerFor()
-	newElement.ControlType()
-	newElement.Culture()
-	newElement.DescribedBy()
-	newElement.FlowsTo()
-	newElement.FrameworkId()
-	newElement.HasKeyboardFocus()
-	newElement.HelpText()
-	newElement.IsContentElement()
-	newElement.IsControlElement()
-	newElement.IsDataValidForForm()
-	newElement.IsEnabled()
-	newElement.IsKeyboardFocusable()
-	newElement.IsOffscreen()
-	newElement.IsPassword()
-	newElement.IsRequiredForForm()
-	newElement.ItemStatus()
-	newElement.ItemType()
-	newElement.LabeledBy()
-	newElement.LocalizedControlType()
-	newElement.Name()
-	newElement.NativeWindowHandle()
-	newElement.Orientation()
-	newElement.ProcessId()
-	newElement.ProviderDescription()
+	rVal := reflect.ValueOf(newElement)
+	rTyp := rVal.Type()
+	for i := 0; i < rVal.NumMethod(); i++ {
+		method := rVal.Method(i)
+		if rTyp.Method(i).Name == SetUIAutomation {
+			continue
+		}
+		method.Call(nil)
+	}
 	for i := 0; i < int(arrLen); i++ {
 		elem, _ := GetElement(elementArr, int32(i))
 		childElem := traverseUIElementTree(ppv, elem)
