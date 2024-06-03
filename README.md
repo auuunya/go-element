@@ -36,8 +36,21 @@ func main() {
 }
 ```
 
-**Find all button controls in Notepad**
+**Find Notepad editable space and enter text**
 ```go
+var (
+	dll                 = syscall.NewLazyDLL("User32.dll")
+	procSendInput       = dll.NewProc("SendInput")
+	procIsWindowEnabled = dll.NewProc("IsWindowEnabled")
+	procSendMessageW    = dll.NewProc("SendMessageW")
+)
+
+const (
+	WM_SETTEXT = 0x000C
+	WM_KEYDOWN = 0x0100
+	VK_RETURN  = 0x0D
+)
+
 func main() {
 	uiautomation.CoInitialize()
 	defer uiautomation.CoUninitialize()
@@ -45,14 +58,28 @@ func main() {
 	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
 	unk := uiautomation.NewIUnKnown(instance)
 	ppv := uiautomation.NewIUIAutomation(unk)
-	root := uiautomation.ElementFromHandle(ppv, findhwnd)
+	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
 	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentName == "Button"
+		return elem.CurrentControlType == uiautomation.UIA_DocumentControlTypeId && elem.CurrentName == "文本编辑器"
 	}
-	foundAll := uiautomation.FindElems(elems, fn)
-	fmt.Printf("foundAll elems: %v\n", foundAll)
+	foundElement := uiautomation.SearchElem(elems, fn)
+	uia_hwnd := foundElement.CurrentNativeWindowHandle
+	unk, _ = foundElement.UIAutoElement.GetCurrentPattern(uiautomation.UIA_ValuePatternId)
+	text := "Hello World!\nHello UI Automation!!!"
+	content, err := windows.UTF16PtrFromString(text)
+	if err != nil {
+		return
+	}
+	retSendText, _, _ := procSendMessageW.Call(
+		uintptr(uia_hwnd),
+		uintptr(WM_SETTEXT),
+		0,
+		uintptr(unsafe.Pointer(content)),
+	)
+	fmt.Printf("retSendText: %#v\n", retSendText)
 }
+
 ```
 **Search for controls specified in the folder**
 ```go

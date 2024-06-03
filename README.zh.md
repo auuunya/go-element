@@ -36,8 +36,21 @@ func main() {
 }
 ```
 
-**查找记事本所有的按钮控件**
+**查找记事本可编辑空间并且输入文本**
 ```go
+var (
+	dll                 = syscall.NewLazyDLL("User32.dll")
+	procSendInput       = dll.NewProc("SendInput")
+	procIsWindowEnabled = dll.NewProc("IsWindowEnabled")
+	procSendMessageW    = dll.NewProc("SendMessageW")
+)
+
+const (
+	WM_SETTEXT = 0x000C
+	WM_KEYDOWN = 0x0100
+	VK_RETURN  = 0x0D
+)
+
 func main() {
 	uiautomation.CoInitialize()
 	defer uiautomation.CoUninitialize()
@@ -45,13 +58,26 @@ func main() {
 	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
 	unk := uiautomation.NewIUnKnown(instance)
 	ppv := uiautomation.NewIUIAutomation(unk)
-	root := uiautomation.ElementFromHandle(ppv, findhwnd)
+	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
 	elems := uiautomation.TraverseUIElementTree(ppv, root)
 	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentName == "按钮"
+		return elem.CurrentControlType == uiautomation.UIA_DocumentControlTypeId && elem.CurrentName == "RichEditD2DPT"
 	}
-	foundAll := uiautomation.FindElems(elems, fn)
-	fmt.Printf("foundAll elems: %v\n", foundAll)
+	foundElement := uiautomation.SearchElem(elems, fn)
+	uia_hwnd := foundElement.CurrentNativeWindowHandle
+	unk, _ = foundElement.UIAutoElement.GetCurrentPattern(uiautomation.UIA_ValuePatternId)
+	text := "Hello World!\nHello UI Automation!!!"
+	content, err := windows.UTF16PtrFromString(text)
+	if err != nil {
+		return
+	}
+	retSendText, _, _ := procSendMessageW.Call(
+		uintptr(uia_hwnd),
+		uintptr(WM_SETTEXT),
+		0,
+		uintptr(unsafe.Pointer(content)),
+	)
+	fmt.Printf("retSendText: %#v\n", retSendText)
 }
 ```
 **搜索文件夹指定的控件**
