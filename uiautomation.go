@@ -10,7 +10,7 @@ type IUIAutomation struct {
 }
 
 func (v *IUIAutomation) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationVtbl struct {
@@ -348,13 +348,13 @@ func (v *IUIAutomation) CreateOrConditionFromNativeArray(in *IUIAutomationCondit
 	}
 	return retVal, nil
 }
-func (v *IUIAutomation) CreatePropertyCondition(in *PropertyId, in2 *VARIANT) (*IUIAutomationCondition, error) {
+func (v *IUIAutomation) CreatePropertyCondition(id PropertyId, value VARIANT) (*IUIAutomationCondition, error) {
 	var retVal *IUIAutomationCondition
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationVtbl)(unsafe.Pointer(v.vtbl)).CreatePropertyCondition,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(unsafe.Pointer(in)),
-		uintptr(unsafe.Pointer(in2)),
+		uintptr(id),
+		uintptr(unsafe.Pointer(&value)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {
@@ -852,7 +852,7 @@ type IUIAutomationElement struct {
 }
 
 func (v *IUIAutomationElement) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationElementVtbl struct {
@@ -1531,12 +1531,27 @@ func (v *IUIAutomationElement) Get_CachedIsEnabled() int32 {
 	return retVal
 }
 
-func (v *IUIAutomationElement) FindAll(condition *IUIAutomationCondition) (*IUIAutomationElementArray, error) {
+func (v *IUIAutomationElement) FindFirst(scope TreeScope, condition *IUIAutomationCondition) (*IUIAutomationElement, error) {
+	var retVal *IUIAutomationElement
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).FindFirst,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	if ret != 0 {
+		return nil, HResult(ret)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) FindAll(scope TreeScope, condition *IUIAutomationCondition) (*IUIAutomationElementArray, error) {
 	var retVal *IUIAutomationElementArray
 	ret, _, _ := syscall.SyscallN(
 		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).FindAll,
 		uintptr(unsafe.Pointer(v)),
-		uintptr(TreeScope_Children),
+		uintptr(scope),
 		uintptr(unsafe.Pointer(condition)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
@@ -1596,7 +1611,7 @@ type IUIAutomationTreeWalker struct {
 }
 
 func (v *IUIAutomationTreeWalker) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationTreeWalkerVtbl struct {
@@ -1698,7 +1713,7 @@ type IUIAutomationCacheRequest struct {
 }
 
 func (v *IUIAutomationCacheRequest) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationCacheRequestVtbl struct {
@@ -1767,7 +1782,7 @@ type IUIAutomationEventHandler struct {
 }
 
 func (v *IUIAutomationEventHandler) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationEventHandlerVtbl struct {
@@ -1799,7 +1814,7 @@ type IUIAutomationFocusChangedEventHandler struct {
 }
 
 func (v *IUIAutomationFocusChangedEventHandler) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationFocusChangedEventHandlerVtbl struct {
@@ -1830,7 +1845,7 @@ type IUIAutomationProxyFactory struct {
 }
 
 func (v *IUIAutomationProxyFactory) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationProxyFactoryVtbl struct {
@@ -1884,7 +1899,7 @@ type IUIAutomationProxyFactoryEntry struct {
 }
 
 func (v *IUIAutomationProxyFactoryEntry) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationProxyFactoryEntryVtbl struct {
@@ -2056,7 +2071,7 @@ type IUIAutomationProxyFactoryMapping struct {
 }
 
 func (v *IUIAutomationProxyFactoryMapping) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationProxyFactoryMappingVtbl struct {
@@ -2184,7 +2199,7 @@ type IUIAutomationStructureChangedEventHandler struct {
 }
 
 func (v *IUIAutomationStructureChangedEventHandler) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationStructureChangedEventHandlerVtbl struct {

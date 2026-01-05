@@ -10,7 +10,7 @@ type IDispatch struct {
 }
 
 func (v *IDispatch) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IDispatchVtbl struct {
@@ -81,7 +81,9 @@ type InvokeResp struct {
 }
 
 func Invoke(v *IDispatch, opt *InvokeReq) (*InvokeResp, error) {
-	var retVal *InvokeResp
+	var resp InvokeResp
+	var pExcepInfo TagExcepInfo
+	var puArgErr uint32
 	ret, _, _ := syscall.SyscallN(
 		(*IDispatchVtbl)(unsafe.Pointer(v.vtbl)).Invoke,
 		uintptr(unsafe.Pointer(v)),
@@ -90,15 +92,16 @@ func Invoke(v *IDispatch, opt *InvokeReq) (*InvokeResp, error) {
 		uintptr(opt.LcId),
 		uintptr(opt.WFlags),
 		uintptr(unsafe.Pointer(opt.PDispParams)),
-		uintptr(unsafe.Pointer(&retVal.PDispParams)),
-		uintptr(unsafe.Pointer(&retVal.PVarResult)),
-		uintptr(unsafe.Pointer(&retVal.PExcepInfo)),
-		uintptr(unsafe.Pointer(&retVal.PuArgErr)),
+		uintptr(0), // pVarResult
+		uintptr(unsafe.Pointer(&pExcepInfo)),
+		uintptr(unsafe.Pointer(&puArgErr)),
 	)
 	if ret != 0 {
 		return nil, HResult(ret)
 	}
-	return retVal, nil
+	resp.PExcepInfo = &pExcepInfo
+	resp.PuArgErr = puArgErr
+	return &resp, nil
 }
 
 type ITypeInfo struct {
@@ -106,7 +109,7 @@ type ITypeInfo struct {
 }
 
 func (v *ITypeInfo) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type ITypeInfoVtbl struct {
@@ -238,7 +241,7 @@ func (v *ITypeInfo) GetDocumentation(in int32) (string, string, uint32, string, 
 		procSysFreeString.Call(bstr2)
 	}
 	if bstr3 != 0 {
-		retVal4 = bstr2str(bstr2)
+		retVal4 = bstr2str(bstr3)
 		procSysFreeString.Call(bstr3)
 	}
 	return retVal, retVal2, retVal3, retVal4, nil
@@ -345,7 +348,7 @@ type ITypeLib struct {
 }
 
 func (v *ITypeLib) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type ITypeLibVtbl struct {

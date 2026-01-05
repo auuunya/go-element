@@ -296,7 +296,24 @@ func bstr2str(bstr uintptr) string {
 	if bstr == 0 {
 		return ""
 	}
-	return syscall.UTF16ToString((*[1 << 20]uint16)(unsafe.Pointer(bstr))[:])
+	// 在 Windows 上 BSTR 是以 null 结尾的 UTF-16 字符串
+	// 指针直接指向字符数组。我们手动计算长度以避免创建巨型切片。
+	p := (*uint16)(unsafe.Pointer(bstr))
+	n := 0
+	for ptr := p; *ptr != 0; ptr = (*uint16)(unsafe.Pointer(uintptr(unsafe.Pointer(ptr)) + 2)) {
+		n++
+		if n > 0x100000 { // 限制最大 1MB 字符，防止无限循环
+			break
+		}
+	}
+	// 使用 syscall.UTF16ToString 将其转换为 Go 字符串
+	// 传入切片头，长度为我们计算出的 n
+	var slice []uint16
+	header := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	header.Data = bstr
+	header.Len = n
+	header.Cap = n
+	return syscall.UTF16ToString(slice)
 }
 
 func string2Bstr(str string) (uintptr, error) {
@@ -386,7 +403,7 @@ func traverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement, cache
 	if cacheRequest != nil {
 		elementArr, err = root.FindAllBuildCache(TreeScope_Children, CreateTrueCondition(ppv), cacheRequest)
 	} else {
-		elementArr, err = FindAll(root, CreateTrueCondition(ppv))
+		elementArr, err = root.FindAll(TreeScope_Children, CreateTrueCondition(ppv))
 	}
 
 	newElement := NewElement(root)
@@ -426,6 +443,10 @@ func TreeString(root *Element, level int) {
 	for _, child := range root.Child {
 		TreeString(child, level+1)
 	}
+}
+
+func (e *Element) String() string {
+	return fmt.Sprintf("Element{Name: %q, Class: %q, Type: %d}", e.CurrentName, e.CurrentClassName, e.CurrentControlType)
 }
 
 func getIndentation(level int) string {

@@ -61,7 +61,7 @@ func (v *IAnnotationProvider) Get_AnnotationTypeName() string {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal
 }
@@ -75,7 +75,7 @@ func (v *IAnnotationProvider) Get_Author() string {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal
 }
@@ -89,7 +89,7 @@ func (v *IAnnotationProvider) Get_DateTime() string {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal
 }
@@ -183,7 +183,7 @@ func (v *IDragProvider) Get_DropEffect() string {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal
 }
@@ -240,7 +240,7 @@ func (v *IDropTargetProvider) Get_DropTargetEffect() string {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal
 }
@@ -533,7 +533,7 @@ func (v *ILegacyIAccessibleProvider) Get_DefaultAction() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -548,7 +548,7 @@ func (v *ILegacyIAccessibleProvider) Get_Description() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -563,7 +563,7 @@ func (v *ILegacyIAccessibleProvider) Get_Help() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -578,7 +578,7 @@ func (v *ILegacyIAccessibleProvider) Get_KeyboardShortcut() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -593,7 +593,7 @@ func (v *ILegacyIAccessibleProvider) Get_Name() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -729,7 +729,7 @@ func (v *IMultipleViewProvider) GetViewName(viewId int32) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1159,7 +1159,7 @@ func (v *ISpreadsheetItemProvider) Get_Formula() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1220,7 +1220,7 @@ func (v *IStylesProvider) Get_ExtendedPropertvs() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1253,7 +1253,7 @@ func (v *IStylesProvider) Get_FillPatternStyle() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1268,7 +1268,7 @@ func (v *IStylesProvider) Get_Shape() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1292,7 +1292,7 @@ func (v *IStylesProvider) Get_StyleName() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -1649,7 +1649,7 @@ func (v *ITextRangeProvider) GetText(in int32) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -2131,7 +2131,7 @@ func (v *IValueProvider) Get_Value() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }

@@ -10,7 +10,7 @@ type IUIAutomationCondition struct {
 }
 
 func (v *IUIAutomationCondition) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationConditionVtbl struct {
@@ -22,7 +22,7 @@ type IUIAutomationAndCondition struct {
 }
 
 func (v *IUIAutomationAndCondition) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationAndConditionVtbl struct {
@@ -74,7 +74,7 @@ type IUIAutomationBoolCondition struct {
 }
 
 func (v *IUIAutomationBoolCondition) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationBoolConditionVtbl struct {
@@ -97,7 +97,7 @@ type IUIAutomationNotCondition struct {
 }
 
 func (v *IUIAutomationNotCondition) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationNotConditionVtbl struct {
@@ -123,7 +123,7 @@ type IUIAutomationPropertyCondition struct {
 }
 
 func (v *IUIAutomationPropertyCondition) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 type IUIAutomationPropertyConditionVtbl struct {

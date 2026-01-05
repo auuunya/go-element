@@ -627,7 +627,7 @@ func (v *ITextServices) TxGetText() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }

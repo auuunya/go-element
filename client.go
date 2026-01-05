@@ -7,7 +7,7 @@ import (
 
 // IUIAutomationInvokePattern
 type IUIAutomationInvokePattern struct {
-	vtbl *IUnKnown
+	vtbl *IUIAutomationInvokePatternVtbl
 }
 type IUIAutomationInvokePatternVtbl struct {
 	IUnKnownVtbl
@@ -16,7 +16,7 @@ type IUIAutomationInvokePatternVtbl struct {
 
 func (v *IUIAutomationInvokePattern) Invoke() error {
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationInvokePatternVtbl)(unsafe.Pointer(v.vtbl)).Invoke,
+		v.vtbl.Invoke,
 		uintptr(unsafe.Pointer(v)),
 	)
 	if ret != 0 {
@@ -26,12 +26,19 @@ func (v *IUIAutomationInvokePattern) Invoke() error {
 }
 
 func (v *IUIAutomationInvokePattern) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
+}
+
+func newIUIAutomationInvokePattern(unk *IUnKnown) *IUIAutomationInvokePattern {
+	return (*IUIAutomationInvokePattern)(unsafe.Pointer(unk))
+}
+func NewIUIAutomationInvokePattern(unk *IUnKnown) *IUIAutomationInvokePattern {
+	return newIUIAutomationInvokePattern(unk)
 }
 
 // IUIAutomationValuePattern
 type IUIAutomationValuePattern struct {
-	vtbl *IUnKnown
+	vtbl *IUIAutomationValuePatternVtbl
 }
 type IUIAutomationValuePatternVtbl struct {
 	IUnKnownVtbl
@@ -49,7 +56,7 @@ func (v *IUIAutomationValuePattern) SetValue(val string) error {
 	}
 	defer procSysFreeString.Call(bstr)
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationValuePatternVtbl)(unsafe.Pointer(v.vtbl)).SetValue,
+		v.vtbl.SetValue,
 		uintptr(unsafe.Pointer(v)),
 		uintptr(bstr),
 	)
@@ -62,7 +69,7 @@ func (v *IUIAutomationValuePattern) SetValue(val string) error {
 func (v *IUIAutomationValuePattern) Get_CurrentValue() (string, error) {
 	var bstr uintptr
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationValuePatternVtbl)(unsafe.Pointer(v.vtbl)).Get_CurrentValue,
+		v.vtbl.Get_CurrentValue,
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&bstr)),
 	)
@@ -73,13 +80,20 @@ func (v *IUIAutomationValuePattern) Get_CurrentValue() (string, error) {
 	return bstr2str(bstr), nil
 }
 
+func newIUIAutomationValuePattern(unk *IUnKnown) *IUIAutomationValuePattern {
+	return (*IUIAutomationValuePattern)(unsafe.Pointer(unk))
+}
+func NewIUIAutomationValuePattern(unk *IUnKnown) *IUIAutomationValuePattern {
+	return newIUIAutomationValuePattern(unk)
+}
+
 func (v *IUIAutomationValuePattern) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 // IUIAutomationSelectionItemPattern
 type IUIAutomationSelectionItemPattern struct {
-	vtbl *IUnKnown
+	vtbl *IUIAutomationSelectionItemPatternVtbl
 }
 type IUIAutomationSelectionItemPatternVtbl struct {
 	IUnKnownVtbl
@@ -94,7 +108,7 @@ type IUIAutomationSelectionItemPatternVtbl struct {
 
 func (v *IUIAutomationSelectionItemPattern) Select() error {
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationSelectionItemPatternVtbl)(unsafe.Pointer(v.vtbl)).Select,
+		v.vtbl.Select,
 		uintptr(unsafe.Pointer(v)),
 	)
 	if ret != 0 {
@@ -104,12 +118,12 @@ func (v *IUIAutomationSelectionItemPattern) Select() error {
 }
 
 func (v *IUIAutomationSelectionItemPattern) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 // IUIAutomationTogglePattern
 type IUIAutomationTogglePattern struct {
-	vtbl *IUnKnown
+	vtbl *IUIAutomationTogglePatternVtbl
 }
 type IUIAutomationTogglePatternVtbl struct {
 	IUnKnownVtbl
@@ -120,7 +134,7 @@ type IUIAutomationTogglePatternVtbl struct {
 
 func (v *IUIAutomationTogglePattern) Toggle() error {
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationTogglePatternVtbl)(unsafe.Pointer(v.vtbl)).Toggle,
+		v.vtbl.Toggle,
 		uintptr(unsafe.Pointer(v)),
 	)
 	if ret != 0 {
@@ -132,7 +146,7 @@ func (v *IUIAutomationTogglePattern) Toggle() error {
 func (v *IUIAutomationTogglePattern) Get_CurrentToggleState() (ToggleState, error) {
 	var state ToggleState
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationTogglePatternVtbl)(unsafe.Pointer(v.vtbl)).Get_CurrentToggleState,
+		v.vtbl.Get_CurrentToggleState,
 		uintptr(unsafe.Pointer(v)),
 		uintptr(unsafe.Pointer(&state)),
 	)
@@ -142,13 +156,20 @@ func (v *IUIAutomationTogglePattern) Get_CurrentToggleState() (ToggleState, erro
 	return state, nil
 }
 
+func newIUIAutomationTogglePattern(unk *IUnKnown) *IUIAutomationTogglePattern {
+	return (*IUIAutomationTogglePattern)(unsafe.Pointer(unk))
+}
+func NewIUIAutomationTogglePattern(unk *IUnKnown) *IUIAutomationTogglePattern {
+	return newIUIAutomationTogglePattern(unk)
+}
+
 func (v *IUIAutomationTogglePattern) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }
 
 // IUIAutomationExpandCollapsePattern
 type IUIAutomationExpandCollapsePattern struct {
-	vtbl *IUnKnown
+	vtbl *IUIAutomationExpandCollapsePatternVtbl
 }
 type IUIAutomationExpandCollapsePatternVtbl struct {
 	IUnKnownVtbl
@@ -160,7 +181,7 @@ type IUIAutomationExpandCollapsePatternVtbl struct {
 
 func (v *IUIAutomationExpandCollapsePattern) Expand() error {
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationExpandCollapsePatternVtbl)(unsafe.Pointer(v.vtbl)).Expand,
+		v.vtbl.Expand,
 		uintptr(unsafe.Pointer(v)),
 	)
 	if ret != 0 {
@@ -171,7 +192,7 @@ func (v *IUIAutomationExpandCollapsePattern) Expand() error {
 
 func (v *IUIAutomationExpandCollapsePattern) Collapse() error {
 	ret, _, _ := syscall.SyscallN(
-		(*IUIAutomationExpandCollapsePatternVtbl)(unsafe.Pointer(v.vtbl)).Collapse,
+		v.vtbl.Collapse,
 		uintptr(unsafe.Pointer(v)),
 	)
 	if ret != 0 {
@@ -181,5 +202,5 @@ func (v *IUIAutomationExpandCollapsePattern) Collapse() error {
 }
 
 func (v *IUIAutomationExpandCollapsePattern) Release() uint32 {
-	return v.vtbl.Release()
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
 }

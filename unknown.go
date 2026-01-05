@@ -17,7 +17,7 @@ type IUnKnownVtbl struct {
 }
 
 func NewIUnKnown(v unsafe.Pointer) *IUnKnown {
-	return (*IUnKnown)(unsafe.Pointer(v))
+	return (*IUnKnown)(v)
 }
 
 func (v *IUnKnown) AddRef() uint32 {
@@ -29,6 +29,9 @@ func (v *IUnKnown) AddRef() uint32 {
 }
 
 func (v *IUnKnown) Release() uint32 {
+	if v == nil || v.Vtbl == nil {
+		return 0
+	}
 	ret, _, _ := syscall.SyscallN(
 		v.Vtbl.Release,
 		uintptr(unsafe.Pointer(v)),
@@ -65,6 +68,11 @@ func HResult(ret uintptr) error {
 	return fmt.Errorf("COM Error: 0x%08X", uint32(ret))
 }
 
-func UnKnownToUintptr(obj *interface{}) uintptr {
-	return uintptr(unsafe.Pointer(obj))
+func UnKnownToUintptr(obj interface{}) uintptr {
+	// 获取接口内部的指针
+	type iface struct {
+		typ uintptr
+		ptr uintptr
+	}
+	return (*iface)(unsafe.Pointer(&obj)).ptr
 }

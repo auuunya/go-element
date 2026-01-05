@@ -17,14 +17,15 @@ type TagSafeArrayBound struct {
 	CElements uint32
 	LLbound   int32
 }
+
 type TagSafeArray struct {
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/oaidl/ns-oaidl-safearray
-	CbElement uint32
 	CDims     uint16
-	CLocks    uint32
 	FFeatures uint16
+	CbElement uint32
+	CLocks    uint32
 	PvData    uintptr
-	Rgsabound []TagSafeArrayBound
+	Rgsabound [1]TagSafeArrayBound // COM 中通常是尾随数组
 }
 
 type UiaPoint struct {
@@ -50,11 +51,12 @@ type UiaRect struct {
 }
 
 type TagDispParams struct {
-	Rgvarg            *VARIANT
-	RgdispidNamedArgs int32
+	Rgvarg            uintptr // 指向 VARIANT 数组
+	RgdispidNamedArgs uintptr // 指向 DISPID 数组
 	Cargs             uint32
 	CNamedArgs        uint32
 }
+
 type TagExcepInfo struct {
 	WCode             uint16
 	WReserved         uint16
@@ -76,32 +78,30 @@ type TYPEDESC struct {
 }
 
 type TagIdlDesc struct {
-	DwReserved uint32
+	DwReserved uintptr // ULONG_PTR
 	WIdlFlags  uint16
 }
 
 type TagParamDesc struct {
-	Pparamdescex *VARIANT
-	WParamFlags  ParamFlag
+	Pparamdescex uintptr // LPPARAMDESCEX
+	WParamFlags  uint16  // PARAMFLAGS
 }
+
 type TagTypeDesc struct {
 }
 
 type TagElemDesc struct {
-	Tdesc *TagTypeDesc
-	Union struct {
-		Idldesc   TagIdlDesc
-		Paramdesc TagParamDesc
-	}
+	Tdesc     TagTypeDesc
+	Paramdesc TagParamDesc
 }
 
 type TagFuncDesc struct {
-	Memid             int32
-	LPrgsCode         int32
-	LPrgelemdescParam *TagElemDesc
-	Funckind          TagFuncKind
-	Invkind           TagInvokeKind
-	Callconv          TagCallConv
+	Memid             int32   // MEMBERID
+	LPrgsCode         uintptr // SCODE*
+	LPrgelemdescParam uintptr // ELEMDESC*
+	Funckind          int32   // FUNCKIND
+	Invkind           int32   // INVOKEKIND
+	Callconv          int32   // CALLCONV
 	CParams           int16
 	CParamsOpt        int16
 	OVft              int16

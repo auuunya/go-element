@@ -13,18 +13,14 @@ var (
 	procCoCreateInstance = ole32.NewProc("CoCreateInstance")
 	procCoInitialize     = ole32.NewProc("CoInitialize")
 	procCoUninitialize   = ole32.NewProc("CoUninitialize")
-	procFindWindowA      = user32.NewProc("FindWindowA")
-	procFindWindowExA    = user32.NewProc("FindWindowExA")
+	procFindWindowW      = user32.NewProc("FindWindowW")
+	procFindWindowExW    = user32.NewProc("FindWindowExW")
 
 	ErrorNotFoundWindow = errors.New("not found window")
 )
 
-func StringToCharPtr(str string) *uint8 {
-	return stringToCharPtr(str)
-}
-
 func GetWindowForString(classname, windowname string) (uintptr, error) {
-	find := findWindowA(classname, windowname)
+	find := findWindowW(classname, windowname)
 	if find == 0 {
 		return 0, ErrorNotFoundWindow
 	}
@@ -40,6 +36,7 @@ func CoInitialize() error {
 	}
 	return nil
 }
+
 func CoUninitialize() {
 	procCoUninitialize.Call()
 }
@@ -48,11 +45,12 @@ func CreateInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, e
 	return createInstance(clsid, riid, clsctx)
 }
 
-func FindWindowA(lpclass, lpwindow string) uintptr {
-	return findWindowA(lpclass, lpwindow)
+func FindWindowW(lpclass, lpwindow string) uintptr {
+	return findWindowW(lpclass, lpwindow)
 }
-func FindWindowExA(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
-	return findWindowExA(phwdn, chwdn, lpclass, lpwindow)
+
+func FindWindowExW(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
+	return findWindowExW(phwdn, chwdn, lpclass, lpwindow)
 }
 
 func createInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
@@ -69,41 +67,49 @@ func createInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, e
 	}
 	return retVal, nil
 }
-func stringToCharPtr(str string) *uint8 {
-	chars := append([]byte(str), 0) // null terminated
-	return &chars[0]
-}
 
-func findWindowA(lpclass, lpwindow string) uintptr {
-	lpclassname := uintptr(0)
-	lpwindowname := uintptr(0)
+func findWindowW(lpclass, lpwindow string) uintptr {
+	var lpclassname, lpwindowname *uint16
+	var err error
 	if lpclass != "" {
-		lpclassname = uintptr(unsafe.Pointer(stringToCharPtr(lpclass)))
+		lpclassname, err = syscall.UTF16PtrFromString(lpclass)
+		if err != nil {
+			return 0
+		}
 	}
 	if lpwindow != "" {
-		lpwindowname = uintptr(unsafe.Pointer(stringToCharPtr(lpwindow)))
+		lpwindowname, err = syscall.UTF16PtrFromString(lpwindow)
+		if err != nil {
+			return 0
+		}
 	}
-	ret, _, _ := procFindWindowA.Call(
-		lpclassname,
-		lpwindowname,
+	ret, _, _ := procFindWindowW.Call(
+		uintptr(unsafe.Pointer(lpclassname)),
+		uintptr(unsafe.Pointer(lpwindowname)),
 	)
 	return ret
 }
 
-func findWindowExA(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
-	lpclassname := uintptr(0)
-	lpwindowname := uintptr(0)
+func findWindowExW(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
+	var lpclassname, lpwindowname *uint16
+	var err error
 	if lpclass != "" {
-		lpclassname = uintptr(unsafe.Pointer(stringToCharPtr(lpclass)))
+		lpclassname, err = syscall.UTF16PtrFromString(lpclass)
+		if err != nil {
+			return 0
+		}
 	}
 	if lpwindow != "" {
-		lpwindowname = uintptr(unsafe.Pointer(stringToCharPtr(lpwindow)))
+		lpwindowname, err = syscall.UTF16PtrFromString(lpwindow)
+		if err != nil {
+			return 0
+		}
 	}
-	ret, _, _ := procFindWindowExA.Call(
+	ret, _, _ := procFindWindowExW.Call(
 		phwdn,
 		chwdn,
-		lpclassname,
-		lpwindowname,
+		uintptr(unsafe.Pointer(lpclassname)),
+		uintptr(unsafe.Pointer(lpwindowname)),
 	)
 	return ret
 }

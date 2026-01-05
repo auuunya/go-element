@@ -35,6 +35,10 @@ type IAccessibleVtbl struct {
 	Put_accValue            uintptr
 }
 
+func (v *IAccessible) Release() uint32 {
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
+}
+
 func newIAccessible(unk *IDispatch) *IAccessible {
 	return (*IAccessible)(unsafe.Pointer(unk))
 }
@@ -148,7 +152,7 @@ func (v *IAccessible) Get_accDefaultAction(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -167,7 +171,7 @@ func (v *IAccessible) Get_accDescription(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -198,7 +202,7 @@ func (v *IAccessible) Get_accHelp(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -218,7 +222,7 @@ func (v *IAccessible) Get_accHelpTopic(in *VARIANT, in2 int32) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -237,7 +241,7 @@ func (v *IAccessible) Get_accKeyboardShortcut(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -256,7 +260,7 @@ func (v *IAccessible) Get_accName(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -325,7 +329,7 @@ func (v *IAccessible) Get_accValue(in *VARIANT) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -390,6 +394,10 @@ type IUIAutomationLegacyIAccessiblePatternVtbl struct {
 	SetValue                    uintptr
 }
 
+func (v *IUIAutomationLegacyIAccessiblePattern) Release() uint32 {
+	return (*IUnKnown)(unsafe.Pointer(v)).Release()
+}
+
 func newIUIAutomationLegacyIAccessiblePattern(unk *IDispatch) *IUIAutomationLegacyIAccessiblePattern {
 	return (*IUIAutomationLegacyIAccessiblePattern)(unsafe.Pointer(unk))
 }
@@ -426,7 +434,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedDefaultAction() (strin
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -441,7 +449,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedDescription() (string,
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -456,7 +464,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedHelp() (string, error)
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -471,7 +479,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedKeyboardShortcut() (st
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -486,7 +494,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedName() (string, error)
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -519,7 +527,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CachedValue() (string, error
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -543,7 +551,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentDefaultAction() (stri
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -558,7 +566,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentDescription() (string
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -573,7 +581,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentHelp() (string, error
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -588,7 +596,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentKeyboardShortcut() (s
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -603,7 +611,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentName() (string, error
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }
@@ -636,7 +644,7 @@ func (v *IUIAutomationLegacyIAccessiblePattern) Get_CurrentValue() (string, erro
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(uintptr(bstr))
 	}
 	return retVal, nil
 }

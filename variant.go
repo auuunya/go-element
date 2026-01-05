@@ -15,6 +15,17 @@ func NewVariant(vt TagVarenum, val int64) VARIANT {
 	}
 }
 
+func VariantFromString(s string) (VARIANT, error) {
+	bstr, err := string2Bstr(s)
+	if err != nil {
+		return VARIANT{}, err
+	}
+	return VARIANT{
+		VT:  VT_BSTR,
+		Val: int64(bstr),
+	}, nil
+}
+
 type TagVarenum uint16
 
 const (
