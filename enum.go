@@ -1,6 +1,6 @@
 package uiautomation
 
-type TxtHitResult int
+type TxtHitResult int32
 
 const (
 	TXTHITRESULT_NOHIT TxtHitResult = iota
@@ -9,7 +9,7 @@ const (
 	TXTHITRESULT_HIT
 )
 
-type StructureChangeType int
+type StructureChangeType int32
 
 const (
 	StructureChangeType_ChildAdded StructureChangeType = iota
@@ -20,7 +20,7 @@ const (
 	StructureChangeType_ChildrenReordered
 )
 
-type WindowVisualState int
+type WindowVisualState int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-windowvisualstate
@@ -29,7 +29,7 @@ const (
 	WindowVisualState_Minimized
 )
 
-type ToggleState int
+type ToggleState int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-togglestate
@@ -38,7 +38,7 @@ const (
 	ToggleState_Indeterminate
 )
 
-type ZoomUnit int
+type ZoomUnit int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-zoomunit
@@ -49,7 +49,7 @@ const (
 	ZoomUnit_SmallIncrement
 )
 
-type WindowInteractionState int
+type WindowInteractionState int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-windowinteractionstate
@@ -60,7 +60,7 @@ const (
 	WindowInteractionState_NotResponding
 )
 
-type SupportedTextSelection int
+type SupportedTextSelection int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-supportedtextselection
@@ -69,7 +69,7 @@ const (
 	SupportedTextSelection_Multiple
 )
 
-type ScrollAmount int
+type ScrollAmount int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-scrollamount
@@ -80,7 +80,7 @@ const (
 	ScrollAmount_SmallIncrement
 )
 
-type RowOrColumnMajor int
+type RowOrColumnMajor int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-roworcolumnmajor
@@ -89,7 +89,7 @@ const (
 	RowOrColumnMajor_Indeterminate
 )
 
-type TextPatternRangeEndpoint int
+type TextPatternRangeEndpoint int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-textpatternrangeendpoint
@@ -97,7 +97,7 @@ const (
 	TextPatternRangeEndpoint_End
 )
 
-type TextUnit int
+type TextUnit int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-textunit
@@ -110,13 +110,13 @@ const (
 	TextUnit_Document
 )
 
-type TextArrtibuteId int
+type TextArrtibuteId int32
 
 const (
 // https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-textattribute-ids
 )
 
-type OrientationType int
+type OrientationType int32
 
 const (
 	OrientationType_None OrientationType = iota
@@ -124,7 +124,7 @@ const (
 	OrientationType_Vertical
 )
 
-type TagFuncKind int
+type TagFuncKind int32
 
 const (
 	FUNC_VIRTUAL TagFuncKind = iota
@@ -134,7 +134,7 @@ const (
 	FUNC_DISPATCH
 )
 
-type TagCallConv int
+type TagCallConv int32
 
 const (
 	CC_FASTCALL TagCallConv = iota

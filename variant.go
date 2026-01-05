@@ -15,7 +15,7 @@ func NewVariant(vt TagVarenum, val int64) VARIANT {
 	}
 }
 
-type TagVarenum int
+type TagVarenum uint16
 
 const (
 	VT_EMPTY            TagVarenum = 0

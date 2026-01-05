@@ -1,6 +1,6 @@
 package uiautomation
 
-type PropertyConditionFlags int
+type PropertyConditionFlags int32
 
 const (
 	PropertyConditionFlags_None           PropertyConditionFlags = 0
@@ -8,7 +8,7 @@ const (
 	PropertyConditionFlags_MatchSubstring PropertyConditionFlags = 0x2
 )
 
-type TreeScope int
+type TreeScope int32
 
 var (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationclient/ne-uiautomationclient-treescope
@@ -21,7 +21,7 @@ var (
 	TreeScope_Subtree     TreeScope = TreeScope_Element | TreeScope_Children | TreeScope_Descendants
 )
 
-type SynchronizedInputType int
+type SynchronizedInputType int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/uiautomationcore/ne-uiautomationcore-synchronizedinputtype
@@ -33,7 +33,7 @@ const (
 	SynchronizedInputType_RightMouseDown SynchronizedInputType = 0x20
 )
 
-type TagDvAspect int
+type TagDvAspect int32
 
 const (
 	DVASPECT_CONTENT   TagDvAspect = 1
@@ -42,7 +42,7 @@ const (
 	DVASPECT_DOCPRINT  TagDvAspect = 8
 )
 
-type CLSCTX int
+type CLSCTX uint32
 
 var (
 	// https://learn.microsoft.com/zh-cn/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
@@ -76,7 +76,7 @@ var (
 	CLSCTX_PS_DLL                          CLSCTX = 0x80000000
 )
 
-type SelFlag int
+type SelFlag int32
 
 var (
 	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/selflag
@@ -88,7 +88,7 @@ var (
 	SELFLAG_REMOVESELECTION SelFlag = 0x10
 )
 
-type TagInvokeKind int
+type TagInvokeKind int32
 
 const (
 	INVOKE_FUNC           TagInvokeKind = 1

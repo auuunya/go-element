@@ -293,7 +293,10 @@ func FindElems(elem *Element, searchFunc SearchFunc) (elems []*Element) {
 }
 
 func bstr2str(bstr uintptr) string {
-	return syscall.UTF16ToString((*[1 << 30]uint16)(unsafe.Pointer(bstr))[:])
+	if bstr == 0 {
+		return ""
+	}
+	return syscall.UTF16ToString((*[1 << 20]uint16)(unsafe.Pointer(bstr))[:])
 }
 
 func string2Bstr(str string) (uintptr, error) {

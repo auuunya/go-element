@@ -1,6 +1,6 @@
 package uiautomation
 
-type PropertyId int
+type PropertyId int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-entry-propids
@@ -62,7 +62,7 @@ const (
 	UIA_VisualEffectsPropertyId            PropertyId = 30163
 )
 
-type PatternId int
+type PatternId int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-controlpattern-ids
@@ -103,7 +103,7 @@ const (
 	UIA_WindowPatternId            PatternId = 10009
 )
 
-type ControlTypeId int
+type ControlTypeId int32
 
 const (
 	// https://learn.microsoft.com/zh-cn/windows/win32/winauto/uiauto-controlpatternmapping
@@ -151,7 +151,7 @@ const (
 	UIA_WindowControlTypeId       ControlTypeId = 50032
 )
 
-type UIA_EventId int
+type UIA_EventId int32
 
 const (
 	UIA_ActiveTextPositionChangedEventId                 UIA_EventId = 20036

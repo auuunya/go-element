@@ -16,6 +16,19 @@ This Go library provides a powerful and high-performance interface for automatin
 go get -u github.com/auuunya/go-element
 ```
 
+### Compilation Instructions
+To ensure proper operation on various Windows architectures (such as 32-bit or 64-bit versions of XP/7/10/11), please refer to the following build commands:
+
+- **64-bit System (Default)**:
+  ```shell
+  GOOS=windows GOARCH=amd64 go build .
+  ```
+- **32-bit System (High Compatibility)**:
+  ```shell
+  GOOS=windows GOARCH=386 go build .
+  ```
+> **Note**: If you receive an `is not valid win32 application` error when running a 64-bit compiled program, please try rebuilding with the `386` architecture.
+
 ### Quick Start:
 
 #### 1. Output UI Tree (Browser Example)

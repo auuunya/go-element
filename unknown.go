@@ -58,8 +58,11 @@ func QueryInterface(v *IUnKnown, riid *syscall.GUID) (unsafe.Pointer, error) {
 }
 
 func HResult(ret uintptr) error {
+	if ret == 0 {
+		return nil
+	}
 	// error info https://pkg.go.dev/golang.org/x/sys/windows
-	return fmt.Errorf("COM Error: 0x%x", ret)
+	return fmt.Errorf("COM Error: 0x%08X", uint32(ret))
 }
 
 func UnKnownToUintptr(obj *interface{}) uintptr {

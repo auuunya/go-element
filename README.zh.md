@@ -16,6 +16,19 @@
 go get -u github.com/auuunya/go-element
 ```
 
+### 编译说明
+为了确保在不同架构的 Windows 系统（如 XP/7/10/11 的 32 位或 64 位版本）上正常运行，请参考以下编译命令：
+
+- **64 位系统 (默认)**:
+  ```shell
+  GOOS=windows GOARCH=amd64 go build .
+  ```
+- **32 位系统 (高兼容性)**:
+  ```shell
+  GOOS=windows GOARCH=386 go build .
+  ```
+> **注意**: 如果在运行 64 位编译的程序时提示 `is not valid win32 application`，请尝试使用 `386` 架构重新编译。
+
 ### 快速开始：
 
 #### 1. 输出 UI 结构树 (以浏览器为例)
