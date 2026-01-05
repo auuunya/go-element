@@ -1,110 +1,78 @@
-## 用于在Go中进行Windows窗体UI自动化的Uiautomation库
+## 用于 Windows 窗体自动化的 Go 语言 UI Automation 库
 [![Go Reference](https://pkg.go.dev/badge/github.com/auuunya/go-element.svg)](https://pkg.go.dev/github.com/auuunya/go-element)
 
 ### 概述
-该库为使用UI自动化框架在Windows上自动执行UI方法提供了一个方便的接口。它允许您通过相应的Windows COM接口与应用程序中的UI元素控件进行交互和操作。该库可将Go方法映射到COM接口中定义的方法，从而轻松在Go应用程序中使用UI自动化.
+本库为使用 Windows UI Automation 框架进行 UI 自动化提供了一个高性能且易用的 Go 语言接口。它允许开发者通过 Windows COM 接口与应用程序中的 UI 元素进行高效交互和操作。
 
-### 特性
-- **COM接口映射:** 该库反映了用户界面自动化COM接口的结构，与 Windows API 结构相对应
-- **元素结构化:** 可更直观地显示应用程序用户界面元素的结构
-- **Automation:** 以编程方式执行用户界面自动化任务，如读取或操作UI控件的状态。
+### 核心改进 
+- **极致性能**: 深度集成 `IUIAutomationCacheRequest`，实现属性和模式的批量获取，大幅减少跨进程通信 (IPC) 开销。
+- **零反射设计**: 彻底移除反射逻辑，改为显式属性填充，提升运行时效率并增强类型安全。
+- **完善的模式支持**: 内置常用自动化模式 (Patterns) 的包装，包括：`Value`（值）、`Invoke`（调用）、`Toggle`（切换）、`ExpandCollapse`（展开折叠）及 `SelectionItem`（选中项）。
+- **资源安全**: 严格的 COM 对象生命周期管理，通过显式的 `Release()` 调用确保无内存泄漏和句柄耗尽。
+- **便捷查询 API**: `Element` 结构体集成 `FindByName` 和 `FindByAutomationId` 等快捷方法，定位元素更简单。
 
 ### 安装
 ```shell
 go get -u github.com/auuunya/go-element
 ```
-```go
-import (
-    ...
-    uiautomation "github.com/auuunya/go-element"
-)
-```
 
-### 示例用法:
-**浏览器元素结构输出**
+### 快速开始：
+
+#### 1. 输出 UI 结构树 (以浏览器为例)
 ```go
+import uia "github.com/auuunya/go-element"
+
 func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("Chrome_WidgetWin_1", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	uiautomation.TreeString(elems, 0)
+	uia.CoInitialize()
+	defer uia.CoUninitialize()
+	
+	hwnd, _ := uia.GetWindowForString("Chrome_WidgetWin_1", "")
+	instance, _ := uia.CreateInstance(uia.CLSID_CUIAutomation, uia.IID_IUIAutomation, uia.CLSCTX_INPROC_SERVER)
+	ppv := uia.NewIUIAutomation(uia.NewIUnKnown(instance))
+	defer ppv.Release()
+
+	root, _ := uia.ElementFromHandle(ppv, hwnd)
+	defer root.Release()
+
+	// 使用 Cache Request 进行高性能遍历
+	elems := uia.TraverseUIElementTree(ppv, root)
+	uia.TreeString(elems, 0)
 }
 ```
 
-**查找记事本可编辑空间并且输入文本**
-```go
-var (
-	dll                 = syscall.NewLazyDLL("User32.dll")
-	procSendInput       = dll.NewProc("SendInput")
-	procIsWindowEnabled = dll.NewProc("IsWindowEnabled")
-	procSendMessageW    = dll.NewProc("SendMessageW")
-)
-
-const (
-	WM_SETTEXT = 0x000C
-	WM_KEYDOWN = 0x0100
-	VK_RETURN  = 0x0D
-)
-
-func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("Notepad", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentControlType == uiautomation.UIA_DocumentControlTypeId && elem.CurrentName == "RichEditD2DPT"
-	}
-	foundElement := uiautomation.SearchElem(elems, fn)
-	uia_hwnd := foundElement.CurrentNativeWindowHandle
-	unk, _ = foundElement.UIAutoElement.GetCurrentPattern(uiautomation.UIA_ValuePatternId)
-	text := "Hello World!\nHello UI Automation!!!"
-	content, err := windows.UTF16PtrFromString(text)
-	if err != nil {
-		return
-	}
-	retSendText, _, _ := procSendMessageW.Call(
-		uintptr(uia_hwnd),
-		uintptr(WM_SETTEXT),
-		0,
-		uintptr(unsafe.Pointer(content)),
-	)
-	fmt.Printf("retSendText: %#v\n", retSendText)
-}
-```
-**搜索文件夹指定的控件**
+#### 2. 自动化记事本 (模式调用示例)
 ```go
 func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("CabinetWClass", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentClassName == "SelectorButton" && elem.CurrentName == "详细信息"
+	uia.CoInitialize()
+	defer uia.CoUninitialize()
+	
+	hwnd, _ := uia.GetWindowForString("Notepad", "")
+	instance, _ := uia.CreateInstance(uia.CLSID_CUIAutomation, uia.IID_IUIAutomation, uia.CLSCTX_ALL)
+	ppv := uia.NewIUIAutomation(uia.NewIUnKnown(instance))
+	defer ppv.Release()
+
+	root, _ := uia.ElementFromHandle(ppv, hwnd)
+	tree := uia.TraverseUIElementTree(ppv, root)
+
+	// 通过名称快速查找元素并使用 ValuePattern 设置内容
+	if editor := tree.FindByName("文本编辑器"); editor != nil {
+		if vp, err := editor.GetValuePattern(); err == nil {
+			defer vp.Release()
+			vp.SetValue("你好，来自 go-element 的自动输入！")
+		}
 	}
-	foundElement := uiautomation.SearchElem(elems, fn)
-	fmt.Printf("foundElement: %v\n", foundElement)
 }
 ```
 
 ### 任务列表
-- [ ] ui结构写入到文件
-- [ ] 更为细化的ui操作
+- [x] 高性能属性缓存 (Cache Request)
+- [x] UI 结构 JSON 序列化导出
+- [x] 常用 Pattern 包装 (Invoke, Value, Toggle 等)
+- [ ] UI 事件监听支持 (Event Handlers)
+- [ ] 更丰富的 UI 交互操作
 
 ### 贡献
-欢迎贡献！如果您发现错误或想添加一些功能，请随时提出问题或提交拉取请求。
+欢迎贡献！如果您发现 Bug 或想添加新功能，请随时提交 Issue 或 Pull Request。
 
 ### 许可证
-该库使用MIT许可证
+本库采用 MIT 许可证。

@@ -97,16 +97,16 @@ const (
 	INVOKE_PROPERTYPUTREF TagInvokeKind = 8
 )
 
-type ParamFalg uint16
+type ParamFlag uint16
 
 const (
 	// https://learn.microsoft.com/zh-cn/previous-versions/windows/desktop/automat/paramflags
-	PARAMFLAG_NONE         ParamFalg = 0
-	PARAMFLAG_FIN          ParamFalg = 0x1
-	PARAMFLAG_FOUT         ParamFalg = 0x2
-	PARAMFLAG_FLCID        ParamFalg = 0x4
-	PARAMFLAG_FRETVAL      ParamFalg = 0x8
-	PARAMFLAG_FOPT         ParamFalg = 0x10
-	PARAMFLAG_FHASDEFAULT  ParamFalg = 0x20
-	PARAMFLAG_FHASCUSTDATA ParamFalg = 0x40
+	PARAMFLAG_NONE         ParamFlag = 0
+	PARAMFLAG_FIN          ParamFlag = 0x1
+	PARAMFLAG_FOUT         ParamFlag = 0x2
+	PARAMFLAG_FLCID        ParamFlag = 0x4
+	PARAMFLAG_FRETVAL      ParamFlag = 0x8
+	PARAMFLAG_FOPT         ParamFlag = 0x10
+	PARAMFLAG_FHASDEFAULT  ParamFlag = 0x20
+	PARAMFLAG_FHASCUSTDATA ParamFlag = 0x40
 )

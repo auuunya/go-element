@@ -9,12 +9,20 @@ type IUIAutomationCondition struct {
 	vtbl *IUnKnown
 }
 
+func (v *IUIAutomationCondition) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationConditionVtbl struct {
 	IUnKnownVtbl
 }
 
 type IUIAutomationAndCondition struct {
 	vtbl *IUIAutomationCondition
+}
+
+func (v *IUIAutomationAndCondition) Release() uint32 {
+	return v.vtbl.Release()
 }
 
 type IUIAutomationAndConditionVtbl struct {
@@ -65,6 +73,10 @@ type IUIAutomationBoolCondition struct {
 	vtbl *IUIAutomationCondition
 }
 
+func (v *IUIAutomationBoolCondition) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationBoolConditionVtbl struct {
 	IUIAutomationConditionVtbl
 	Get_BooleanValue uintptr
@@ -82,6 +94,10 @@ func Get_BooleanValue(v *IUIAutomationBoolCondition) int32 {
 
 type IUIAutomationNotCondition struct {
 	vtbl *IUIAutomationCondition
+}
+
+func (v *IUIAutomationNotCondition) Release() uint32 {
+	return v.vtbl.Release()
 }
 
 type IUIAutomationNotConditionVtbl struct {
@@ -104,6 +120,10 @@ func GetChild(v *IUIAutomationNotCondition) (*IUIAutomationCondition, error) {
 
 type IUIAutomationPropertyCondition struct {
 	vtbl *IUIAutomationCondition
+}
+
+func (v *IUIAutomationPropertyCondition) Release() uint32 {
+	return v.vtbl.Release()
 }
 
 type IUIAutomationPropertyConditionVtbl struct {

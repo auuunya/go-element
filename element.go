@@ -49,7 +49,8 @@ type Element struct {
 	CurrentProcessId            int32
 	CurrentProviderDescription  string
 
-	Child []*Element `json:"child,omitempty"`
+	SupportedPatterns []PatternId `json:"supported_patterns,omitempty"`
+	Child             []*Element  `json:"child,omitempty"`
 }
 
 func NewElement(uiaumation *IUIAutomationElement) *Element {
@@ -89,7 +90,7 @@ func (e *Element) SetUIAutomation(uiaumation *IUIAutomationElement) {
 	e.UIAutoElement = uiaumation
 }
 
-func (e *Element) AccleratorKey() error {
+func (e *Element) AcceleratorKey() error {
 	val, err := e.UIAutoElement.Get_CurrentAcceleratorKey()
 	e.CurrentAcceleratorKey = val
 	return err
@@ -97,7 +98,7 @@ func (e *Element) AccleratorKey() error {
 
 func (e *Element) AccessKey() error {
 	val, err := e.UIAutoElement.Get_CurrentAccessKey()
-	e.CurrentAcceleratorKey = val
+	e.CurrentAccessKey = val
 	return err
 }
 
@@ -310,33 +311,107 @@ func string2Bstr(str string) (uintptr, error) {
 	return bstrPtr, nil
 }
 
-func TraverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Element {
-	return traverseUIElementTree(ppv, root)
+func (e *Element) Populate(cached bool) {
+	if cached {
+		e.CurrentName, _ = e.UIAutoElement.Get_CachedName()
+		e.CurrentClassName, _ = e.UIAutoElement.Get_CachedClassName()
+		e.CurrentControlType = e.UIAutoElement.Get_CachedControlType()
+		e.CurrentAutomationId, _ = e.UIAutoElement.Get_CachedAutomationId()
+		e.CurrentIsEnabled = e.UIAutoElement.Get_CachedIsEnabled()
+		e.CurrentProcessId = e.UIAutoElement.Get_CachedProcessId()
+		e.CurrentLocalizedControlType, _ = e.UIAutoElement.Get_CachedLocalizedControlType()
+	} else {
+		e.CurrentName, _ = e.UIAutoElement.Get_CurrentName()
+		e.CurrentClassName, _ = e.UIAutoElement.Get_CurrentClassName()
+		e.CurrentControlType = e.UIAutoElement.Get_CurrentControlType()
+		e.CurrentAutomationId, _ = e.UIAutoElement.Get_CurrentAutomationId()
+		e.CurrentIsEnabled = e.UIAutoElement.Get_CurrentIsEnabled()
+		e.CurrentProcessId = e.UIAutoElement.Get_CurrentProcessId()
+		e.CurrentLocalizedControlType, _ = e.UIAutoElement.Get_CurrentLocalizedControlType()
+	}
+
+	commonPatterns := []PatternId{
+		UIA_ValuePatternId,
+		UIA_InvokePatternId,
+		UIA_SelectionPatternId,
+		UIA_ExpandCollapsePatternId,
+		UIA_TogglePatternId,
+	}
+	for _, pid := range commonPatterns {
+		var pattern *IUnKnown
+		var err error
+		if cached {
+			pattern, err = e.UIAutoElement.GetCachedPattern(pid)
+		} else {
+			pattern, err = e.UIAutoElement.GetCurrentPattern(pid)
+		}
+		if err == nil && pattern != nil {
+			e.SupportedPatterns = append(e.SupportedPatterns, pid)
+			pattern.Release()
+		}
+	}
 }
 
-const (
-	SetUIAutomation = "SetUIAutomation"
-)
+func TraverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Element {
+	cacheRequest, _ := ppv.CreateCacheRequest()
+	if cacheRequest != nil {
+		defer cacheRequest.Release()
+		cacheRequest.AddProperty(UIA_NamePropertyId)
+		cacheRequest.AddProperty(UIA_ClassNamePropertyId)
+		cacheRequest.AddProperty(UIA_ControlTypePropertyId)
+		cacheRequest.AddProperty(UIA_AutomationIdPropertyId)
+		cacheRequest.AddProperty(UIA_IsEnabledPropertyId)
+		cacheRequest.AddProperty(UIA_ProcessIdPropertyId)
+		cacheRequest.AddProperty(UIA_LocalizedControlTypePropertyId)
 
-func traverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement) *Element {
-	condition := CreateTrueCondition(ppv)
-	elementArr, _ := FindAll(root, condition)
-	arrLen := Get_Length(elementArr)
+		cacheRequest.AddPattern(UIA_ValuePatternId)
+		cacheRequest.AddPattern(UIA_InvokePatternId)
+		cacheRequest.AddPattern(UIA_SelectionPatternId)
+		cacheRequest.AddPattern(UIA_ExpandCollapsePatternId)
+		cacheRequest.AddPattern(UIA_TogglePatternId)
+
+		cacheRequest.Put_TreeScope(TreeScope_Subtree)
+	}
+
+	return traverseUIElementTree(ppv, root, cacheRequest)
+}
+
+func traverseUIElementTree(ppv *IUIAutomation, root *IUIAutomationElement, cacheRequest *IUIAutomationCacheRequest) *Element {
+	var elementArr *IUIAutomationElementArray
+	var err error
+
+	if cacheRequest != nil {
+		elementArr, err = root.FindAllBuildCache(TreeScope_Children, CreateTrueCondition(ppv), cacheRequest)
+	} else {
+		elementArr, err = FindAll(root, CreateTrueCondition(ppv))
+	}
+
 	newElement := NewElement(root)
-	rVal := reflect.ValueOf(newElement)
-	rTyp := rVal.Type()
-	for i := 0; i < rVal.NumMethod(); i++ {
-		method := rVal.Method(i)
-		if rTyp.Method(i).Name == SetUIAutomation {
-			continue
+	if cacheRequest != nil {
+		// 如果支持缓存，由于 FindAllBuildCache 只处理子节点，根节点需要手动更新缓存
+		cachedRoot, _ := root.BuildUpdatedCache(cacheRequest)
+		if cachedRoot != nil {
+			newElement.UIAutoElement = cachedRoot
+			newElement.Populate(true)
+		} else {
+			newElement.Populate(false)
 		}
-		method.Call(nil)
+	} else {
+		newElement.Populate(false)
 	}
-	for i := 0; i < int(arrLen); i++ {
-		elem, _ := GetElement(elementArr, int32(i))
-		childElem := traverseUIElementTree(ppv, elem)
-		newElement.Child = append(newElement.Child, childElem)
+
+	if err == nil && elementArr != nil {
+		defer elementArr.Release()
+		arrLen := elementArr.Get_Length()
+		for i := 0; i < int(arrLen); i++ {
+			elem, _ := elementArr.GetElement(int32(i))
+			if elem != nil {
+				childElem := traverseUIElementTree(ppv, elem, cacheRequest)
+				newElement.Child = append(newElement.Child, childElem)
+			}
+		}
 	}
+
 	return newElement
 }
 
@@ -352,4 +427,68 @@ func TreeString(root *Element, level int) {
 
 func getIndentation(level int) string {
 	return strings.Repeat("  ", level)
+}
+
+func (e *Element) FindByName(name string) *Element {
+	if e.CurrentName == name {
+		return e
+	}
+	for _, child := range e.Child {
+		if found := child.FindByName(name); found != nil {
+			return found
+		}
+	}
+	return nil
+}
+
+func (e *Element) FindByAutomationId(id string) *Element {
+	if e.CurrentAutomationId == id {
+		return e
+	}
+	for _, child := range e.Child {
+		if found := child.FindByAutomationId(id); found != nil {
+			return found
+		}
+	}
+	return nil
+}
+
+func (e *Element) GetValuePattern() (*IUIAutomationValuePattern, error) {
+	unk, err := e.UIAutoElement.GetCurrentPattern(UIA_ValuePatternId)
+	if err != nil {
+		return nil, err
+	}
+	return (*IUIAutomationValuePattern)(unsafe.Pointer(unk)), nil
+}
+
+func (e *Element) GetInvokePattern() (*IUIAutomationInvokePattern, error) {
+	unk, err := e.UIAutoElement.GetCurrentPattern(UIA_InvokePatternId)
+	if err != nil {
+		return nil, err
+	}
+	return (*IUIAutomationInvokePattern)(unsafe.Pointer(unk)), nil
+}
+
+func (e *Element) GetTogglePattern() (*IUIAutomationTogglePattern, error) {
+	unk, err := e.UIAutoElement.GetCurrentPattern(UIA_TogglePatternId)
+	if err != nil {
+		return nil, err
+	}
+	return (*IUIAutomationTogglePattern)(unsafe.Pointer(unk)), nil
+}
+
+func (e *Element) GetExpandCollapsePattern() (*IUIAutomationExpandCollapsePattern, error) {
+	unk, err := e.UIAutoElement.GetCurrentPattern(UIA_ExpandCollapsePatternId)
+	if err != nil {
+		return nil, err
+	}
+	return (*IUIAutomationExpandCollapsePattern)(unsafe.Pointer(unk)), nil
+}
+
+func (e *Element) GetSelectionItemPattern() (*IUIAutomationSelectionItemPattern, error) {
+	unk, err := e.UIAutoElement.GetCurrentPattern(UIA_SelectionItemPatternId)
+	if err != nil {
+		return nil, err
+	}
+	return (*IUIAutomationSelectionItemPattern)(unsafe.Pointer(unk)), nil
 }

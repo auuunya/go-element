@@ -9,6 +9,10 @@ type IDispatch struct {
 	vtbl *IUnKnown
 }
 
+func (v *IDispatch) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IDispatchVtbl struct {
 	IUnKnownVtbl
 	GetIDsOfNames    uintptr
@@ -99,6 +103,10 @@ func Invoke(v *IDispatch, opt *InvokeReq) (*InvokeResp, error) {
 
 type ITypeInfo struct {
 	vtbl *IUnKnown
+}
+
+func (v *ITypeInfo) Release() uint32 {
+	return v.vtbl.Release()
 }
 
 type ITypeInfoVtbl struct {
@@ -193,11 +201,11 @@ func (v *ITypeInfo) GetDllEntry(in int32, in2 TagInvokeKind) (string, string, ui
 	var retVal2 string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	if bstr2 != 0 {
 		retVal2 = bstr2str(bstr2)
-		procSysAllocString.Call(uintptr(bstr2))
+		procSysFreeString.Call(bstr2)
 	}
 	return retVal, retVal2, retVal3, nil
 }
@@ -223,15 +231,15 @@ func (v *ITypeInfo) GetDocumentation(in int32) (string, string, uint32, string, 
 	var retVal4 string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	if bstr2 != 0 {
 		retVal2 = bstr2str(bstr2)
-		procSysAllocString.Call(uintptr(bstr2))
+		procSysFreeString.Call(bstr2)
 	}
 	if bstr3 != 0 {
 		retVal4 = bstr2str(bstr2)
-		procSysAllocString.Call(uintptr(bstr3))
+		procSysFreeString.Call(bstr3)
 	}
 	return retVal, retVal2, retVal3, retVal4, nil
 }
@@ -278,7 +286,7 @@ func (v *ITypeInfo) GetMops(in int32) (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -299,7 +307,7 @@ func (v *ITypeInfo) GetNames(in int32, in2 uint32) (string, uint32, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, retVal2, nil
 }
@@ -335,6 +343,11 @@ func (v *ITypeInfo) ReleaseVarDesc() error {
 type ITypeLib struct {
 	vtbl *IUnKnown
 }
+
+func (v *ITypeLib) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type ITypeLibVtbl struct {
 	IUnKnownVtbl
 }

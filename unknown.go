@@ -20,19 +20,27 @@ func NewIUnKnown(v unsafe.Pointer) *IUnKnown {
 	return (*IUnKnown)(unsafe.Pointer(v))
 }
 
-func AddRef(v *IUnKnown) uint32 {
+func (v *IUnKnown) AddRef() uint32 {
 	ret, _, _ := syscall.SyscallN(
-		(*IUnKnownVtbl)(unsafe.Pointer(v.Vtbl)).AddRef,
+		v.Vtbl.AddRef,
 		uintptr(unsafe.Pointer(v)),
 	)
 	return uint32(ret)
 }
-func Release(v *IUnKnown) uint32 {
+
+func (v *IUnKnown) Release() uint32 {
 	ret, _, _ := syscall.SyscallN(
-		(*IUnKnownVtbl)(unsafe.Pointer(v.Vtbl)).Release,
+		v.Vtbl.Release,
 		uintptr(unsafe.Pointer(v)),
 	)
 	return uint32(ret)
+}
+
+func AddRef(v *IUnKnown) uint32 {
+	return v.AddRef()
+}
+func Release(v *IUnKnown) uint32 {
+	return v.Release()
 }
 
 func QueryInterface(v *IUnKnown, riid *syscall.GUID) (unsafe.Pointer, error) {

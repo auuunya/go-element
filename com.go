@@ -2,7 +2,6 @@ package uiautomation
 
 import (
 	"errors"
-	"log"
 	"syscall"
 	"unsafe"
 )
@@ -24,12 +23,12 @@ func StringToCharPtr(str string) *uint8 {
 	return stringToCharPtr(str)
 }
 
-func GetWindowForString(classname, windowname string) uintptr {
+func GetWindowForString(classname, windowname string) (uintptr, error) {
 	find := findWindowA(classname, windowname)
 	if find == 0 {
-		log.Fatal(ErrorNotFoundWindow)
+		return 0, ErrorNotFoundWindow
 	}
-	return find
+	return find, nil
 }
 
 func CoInitialize() error {
@@ -100,7 +99,7 @@ func findWindowExA(phwdn, chwdn uintptr, lpclass, lpwindow string) uintptr {
 	if lpwindow != "" {
 		lpwindowname = uintptr(unsafe.Pointer(stringToCharPtr(lpwindow)))
 	}
-	ret, _, _ := procFindWindowA.Call(
+	ret, _, _ := procFindWindowExA.Call(
 		phwdn,
 		chwdn,
 		lpclassname,

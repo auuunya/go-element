@@ -1,108 +1,75 @@
-## Uiautomation Library for Windows in Go
+## UI Automation Library for Windows in Go
 [![Go Reference](https://pkg.go.dev/badge/github.com/auuunya/go-element.svg)](https://pkg.go.dev/github.com/auuunya/go-element)
 
 ### Overview
-This Go library provides a convenient interface for automating UI tasks on Windows using the UI Automation framework. It allows you to interact with and manipulate UI elements in applications through the corresponding Windows COM interfaces. The library maps Go methods to the methods defined in the COM interfaces, making it easy to work with UI Automation in a Go application.
+This Go library provides a powerful and high-performance interface for automating UI tasks on Windows using the UI Automation framework. It allows you to interact with and manipulate UI elements in applications through Windows COM interfaces.
 
-### Features
-- **COM Interface Mapping:** The library mirrors the structure of UI Automation COM interfaces, Corresponds to the Windows API structure
-- **Element Structuring:** The structure of the application's UI elements can be visualized more intuitively
-- **Automation:** Perform UI automation tasks programmatically, such as reading or manipulating the state of UI controls.
+### Core Enhancements
+- **High Performance**: Optimized with `IUIAutomationCacheRequest` to batch fetch properties and patterns, reducing IPC (Inter-Process Communication) overhead significantly.
+- **Reflection-Free**: Removed reflection-based property population for improved runtime efficiency and better type safety.
+- **Improved Pattern Support**: Ready-to-use wrappers for common Automation Patterns: `Value`, `Invoke`, `Toggle`, `ExpandCollapse`, and `SelectionItem`.
+- **Resource Safety**: Strict COM object lifecycle management with explicit `Release()` calls to prevent memory leaks and handle exhaustion.
+- **Better Search API**: Convenient methods like `FindByName` and `FindByAutomationId` integrated into the `Element` structure.
 
-### Install
+### Installation
 ```shell
 go get -u github.com/auuunya/go-element
 ```
-```go
-import (
-    ...
-    uiautomation "github.com/auuunya/go-element"
-)
-```
 
-### Examples:
-**Browser Element Structure Output**
+### Quick Start:
+
+#### 1. Output UI Tree (Browser Example)
 ```go
+import uia "github.com/auuunya/go-element"
+
 func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("Chrome_WidgetWin_1", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	uiautomation.TreeString(elems, 0)
+	uia.CoInitialize()
+	defer uia.CoUninitialize()
+	
+	hwnd, _ := uia.GetWindowForString("Chrome_WidgetWin_1", "")
+	instance, _ := uia.CreateInstance(uia.CLSID_CUIAutomation, uia.IID_IUIAutomation, uia.CLSCTX_INPROC_SERVER)
+	ppv := uia.NewIUIAutomation(uia.NewIUnKnown(instance))
+	defer ppv.Release()
+
+	root, _ := uia.ElementFromHandle(ppv, hwnd)
+	defer root.Release()
+
+	// High-performance traversal using Cache Request
+	elems := uia.TraverseUIElementTree(ppv, root)
+	uia.TreeString(elems, 0)
 }
 ```
 
-**Find Notepad editable space and enter text**
-```go
-var (
-	dll                 = syscall.NewLazyDLL("User32.dll")
-	procSendInput       = dll.NewProc("SendInput")
-	procIsWindowEnabled = dll.NewProc("IsWindowEnabled")
-	procSendMessageW    = dll.NewProc("SendMessageW")
-)
-
-const (
-	WM_SETTEXT = 0x000C
-	WM_KEYDOWN = 0x0100
-	VK_RETURN  = 0x0D
-)
-
-func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("Notepad", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentControlType == uiautomation.UIA_DocumentControlTypeId && elem.CurrentName == "文本编辑器"
-	}
-	foundElement := uiautomation.SearchElem(elems, fn)
-	uia_hwnd := foundElement.CurrentNativeWindowHandle
-	unk, _ = foundElement.UIAutoElement.GetCurrentPattern(uiautomation.UIA_ValuePatternId)
-	text := "Hello World!\nHello UI Automation!!!"
-	content, err := windows.UTF16PtrFromString(text)
-	if err != nil {
-		return
-	}
-	retSendText, _, _ := procSendMessageW.Call(
-		uintptr(uia_hwnd),
-		uintptr(WM_SETTEXT),
-		0,
-		uintptr(unsafe.Pointer(content)),
-	)
-	fmt.Printf("retSendText: %#v\n", retSendText)
-}
-
-```
-**Search for controls specified in the folder**
+#### 2. Automobile Notepad (Pattern Usage)
 ```go
 func main() {
-	uiautomation.CoInitialize()
-	defer uiautomation.CoUninitialize()
-	findhwnd := uiautomation.GetWindowForString("CabinetWClass", "")
-	instance, _ := uiautomation.CreateInstance(uiautomation.CLSID_CUIAutomation, uiautomation.IID_IUIAutomation, uiautomation.CLSCTX_INPROC_SERVER|uiautomation.CLSCTX_LOCAL_SERVER|uiautomation.CLSCTX_REMOTE_SERVER)
-	unk := uiautomation.NewIUnKnown(instance)
-	ppv := uiautomation.NewIUIAutomation(unk)
-	root, _ := uiautomation.ElementFromHandle(ppv, findhwnd)
-	elems := uiautomation.TraverseUIElementTree(ppv, root)
-	fn := func(elem *uiautomation.Element) bool {
-		return elem.CurrentClassName == "SelectorButton"
+	uia.CoInitialize()
+	defer uia.CoUninitialize()
+	
+	hwnd, _ := uia.GetWindowForString("Notepad", "")
+	instance, _ := uia.CreateInstance(uia.CLSID_CUIAutomation, uia.IID_IUIAutomation, uia.CLSCTX_ALL)
+	ppv := uia.NewIUIAutomation(uia.NewIUnKnown(instance))
+	defer ppv.Release()
+
+	root, _ := uia.ElementFromHandle(ppv, hwnd)
+	tree := uia.TraverseUIElementTree(ppv, root)
+
+	// Find element by name and set value via Pattern
+	if editor := tree.FindByName("文本编辑器"); editor != nil {
+		if vp, err := editor.GetValuePattern(); err == nil {
+			defer vp.Release()
+			vp.SetValue("Hello from go-element!")
+		}
 	}
-	foundElement := uiautomation.SearchElem(elems, fn)
-	fmt.Printf("foundElement: %v\n", foundElement)
 }
 ```
 
-### Features
-- [ ] add the ui structure is written to the file
-- [ ] more fine-tuned ui operations
+### Features Status
+- [x] High-performance property caching
+- [x] JSON serialization of UI structure
+- [x] Common Pattern wrappers (Invoke, Value, Toggle, etc.)
+- [ ] UI Event listener support
+- [ ] More specialized UI operations
 
 ### Contribution
 Contributions are welcome! If you find a bug or want to enhance the library, feel free to open an issue or submit a pull request.

@@ -82,7 +82,7 @@ type TagIdlDesc struct {
 
 type TagParamDesc struct {
 	Pparamdescex *VARIANT
-	WParamFlags  ParamFalg
+	WParamFlags  ParamFlag
 }
 type TagTypeDesc struct {
 }

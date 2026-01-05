@@ -8,6 +8,11 @@ import (
 type IUIAutomation struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomation) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationVtbl struct {
 	IUnKnownVtbl
 
@@ -611,7 +616,7 @@ func (v *IUIAutomation) GetPatternProgrammaticName(in PatternId) (string, error)
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -630,7 +635,7 @@ func (v *IUIAutomation) GetPropertyProgrammaticName(in PropertyId) (string, erro
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -845,6 +850,11 @@ func CreateTrueCondition(v *IUIAutomation) *IUIAutomationCondition {
 type IUIAutomationElement struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationElement) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationElementVtbl struct {
 	IUnKnownVtbl
 
@@ -966,6 +976,20 @@ func (v *IUIAutomationElement) GetCurrentPattern(patternId PatternId) (*IUnKnown
 	}
 	return retVal, nil
 }
+
+func (v *IUIAutomationElement) GetCachedPattern(patternId PatternId) (*IUnKnown, error) {
+	var retVal *IUnKnown
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).GetCachedPattern,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(patternId),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	if ret != 0 {
+		return nil, HResult(ret)
+	}
+	return retVal, nil
+}
 func (v *IUIAutomationElement) GetCurrentPatternAs(patternId PatternId, riid *syscall.GUID) (unsafe.Pointer, error) {
 	var retVal unsafe.Pointer
 	ret, _, _ := syscall.SyscallN(
@@ -1040,7 +1064,7 @@ func (v *IUIAutomationElement) Get_CurrentAcceleratorKey() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1055,7 +1079,7 @@ func (v *IUIAutomationElement) Get_CurrentAccessKey() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1070,7 +1094,7 @@ func (v *IUIAutomationElement) Get_CurrentAriaProperties() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1085,7 +1109,7 @@ func (v *IUIAutomationElement) Get_CurrentAriaRole() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1100,7 +1124,7 @@ func (v *IUIAutomationElement) Get_CurrentAutomationId() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1125,7 +1149,7 @@ func (v *IUIAutomationElement) Get_CurrentClassName() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1191,7 +1215,7 @@ func (v *IUIAutomationElement) Get_CurrentFrameworkId() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1217,7 +1241,7 @@ func (v *IUIAutomationElement) Get_CurrentHelpText() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1312,7 +1336,7 @@ func (v *IUIAutomationElement) Get_CurrentItemStatus() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1328,7 +1352,7 @@ func (v *IUIAutomationElement) Get_CurrentItemType() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1354,7 +1378,7 @@ func (v *IUIAutomationElement) Get_CurrentLocalizedControlType() (string, error)
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1370,7 +1394,7 @@ func (v *IUIAutomationElement) Get_CurrentName() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1412,9 +1436,99 @@ func (v *IUIAutomationElement) Get_CurrentProviderDescription() (string, error) 
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
+}
+
+func (v *IUIAutomationElement) Get_CachedProcessId() int32 {
+	var retVal int32
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedProcessId,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	return retVal
+}
+
+func (v *IUIAutomationElement) Get_CachedControlType() ControlTypeId {
+	var retVal ControlTypeId
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedControlType,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	return retVal
+}
+
+func (v *IUIAutomationElement) Get_CachedLocalizedControlType() (string, error) {
+	var bstr uintptr
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedLocalizedControlType,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&bstr)),
+	)
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysFreeString.Call(bstr)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) Get_CachedName() (string, error) {
+	var bstr uintptr
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedName,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&bstr)),
+	)
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysFreeString.Call(bstr)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) Get_CachedAutomationId() (string, error) {
+	var bstr uintptr
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedAutomationId,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&bstr)),
+	)
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysFreeString.Call(bstr)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) Get_CachedClassName() (string, error) {
+	var bstr uintptr
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedClassName,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&bstr)),
+	)
+	var retVal string
+	if bstr != 0 {
+		retVal = bstr2str(bstr)
+		procSysFreeString.Call(bstr)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) Get_CachedIsEnabled() int32 {
+	var retVal int32
+	syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).Get_CachedIsEnabled,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	return retVal
 }
 
 func (v *IUIAutomationElement) FindAll(condition *IUIAutomationCondition) (*IUIAutomationElementArray, error) {
@@ -1424,6 +1538,36 @@ func (v *IUIAutomationElement) FindAll(condition *IUIAutomationCondition) (*IUIA
 		uintptr(unsafe.Pointer(v)),
 		uintptr(TreeScope_Children),
 		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	if ret != 0 {
+		return nil, HResult(ret)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) FindAllBuildCache(scope TreeScope, condition *IUIAutomationCondition, cacheRequest *IUIAutomationCacheRequest) (*IUIAutomationElementArray, error) {
+	var retVal *IUIAutomationElementArray
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).FindAllBuildCache,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(cacheRequest)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+	if ret != 0 {
+		return nil, HResult(ret)
+	}
+	return retVal, nil
+}
+
+func (v *IUIAutomationElement) BuildUpdatedCache(cacheRequest *IUIAutomationCacheRequest) (*IUIAutomationElement, error) {
+	var retVal *IUIAutomationElement
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationElementVtbl)(unsafe.Pointer(v.vtbl)).BuildUpdatedCache,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(unsafe.Pointer(cacheRequest)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
 	if ret != 0 {
@@ -1451,6 +1595,10 @@ type IUIAutomationTreeWalker struct {
 	vtbl *IUnKnown
 }
 
+func (v *IUIAutomationTreeWalker) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationTreeWalkerVtbl struct {
 	IUnKnownVtbl
 
@@ -1472,6 +1620,15 @@ type IUIAutomationTreeWalkerVtbl struct {
 type IUIAutomationElementArray struct {
 	vtbl *IUIAutomationElementArrayVtbl
 }
+
+func (v *IUIAutomationElementArray) Release() uint32 {
+	ret, _, _ := syscall.SyscallN(
+		v.vtbl.Release,
+		uintptr(unsafe.Pointer(v)),
+	)
+	return uint32(ret)
+}
+
 type IUIAutomationElementArrayVtbl struct {
 	QueryInterface uintptr
 	AddRef         uintptr
@@ -1539,6 +1696,11 @@ func GetElement(v *IUIAutomationElementArray, i int32) (*IUIAutomationElement, e
 type IUIAutomationCacheRequest struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationCacheRequest) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationCacheRequestVtbl struct {
 	IUnKnownVtbl
 	AddPattern                uintptr
@@ -1552,9 +1714,62 @@ type IUIAutomationCacheRequestVtbl struct {
 	Put_TreeScope             uintptr
 }
 
+func (v *IUIAutomationCacheRequest) AddProperty(propertyId PropertyId) error {
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationCacheRequestVtbl)(unsafe.Pointer(v.vtbl)).AddProperty,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(propertyId),
+	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
+}
+
+func (v *IUIAutomationCacheRequest) AddPattern(patternId PatternId) error {
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationCacheRequestVtbl)(unsafe.Pointer(v.vtbl)).AddPattern,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(patternId),
+	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
+}
+
+func (v *IUIAutomationCacheRequest) Put_TreeScope(scope TreeScope) error {
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationCacheRequestVtbl)(unsafe.Pointer(v.vtbl)).Put_TreeScope,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(scope),
+	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
+}
+
+func (v *IUIAutomationCacheRequest) Put_AutomationElementMode(mode int32) error {
+	ret, _, _ := syscall.SyscallN(
+		(*IUIAutomationCacheRequestVtbl)(unsafe.Pointer(v.vtbl)).Put_AutomationElementMode,
+		uintptr(unsafe.Pointer(v)),
+		uintptr(mode),
+	)
+	if ret != 0 {
+		return HResult(ret)
+	}
+	return nil
+}
+
 type IUIAutomationEventHandler struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationEventHandler) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationEventHandlerVtbl struct {
 	IUnKnownVtbl
 	HandleAutomationEvent uintptr
@@ -1582,6 +1797,11 @@ func (v *IUIAutomationEventHandler) HandleAutomationEvent(in *IUIAutomationEleme
 type IUIAutomationFocusChangedEventHandler struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationFocusChangedEventHandler) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationFocusChangedEventHandlerVtbl struct {
 	IUnKnownVtbl
 	HandleFocusChangedEvent uintptr
@@ -1608,6 +1828,11 @@ func (v *IUIAutomationFocusChangedEventHandler) HandleFocusChangedEvent(in *IUIA
 type IUIAutomationProxyFactory struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationProxyFactory) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationProxyFactoryVtbl struct {
 	IUnKnownVtbl
 	CreateProvider     uintptr
@@ -1649,7 +1874,7 @@ func (v *IUIAutomationProxyFactory) Get_ProxyFactoryId() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1657,6 +1882,11 @@ func (v *IUIAutomationProxyFactory) Get_ProxyFactoryId() (string, error) {
 type IUIAutomationProxyFactoryEntry struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationProxyFactoryEntry) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationProxyFactoryEntryVtbl struct {
 	IUnKnownVtbl
 	Get_AllowSubstringMatch        uintptr
@@ -1709,7 +1939,7 @@ func (v *IUIAutomationProxyFactoryEntry) Get_ClassName() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1724,7 +1954,7 @@ func (v *IUIAutomationProxyFactoryEntry) Get_ImageName() (string, error) {
 	var retVal string
 	if bstr != 0 {
 		retVal = bstr2str(bstr)
-		procSysAllocString.Call(uintptr(bstr))
+		procSysFreeString.Call(bstr)
 	}
 	return retVal, nil
 }
@@ -1824,6 +2054,11 @@ func (v *IUIAutomationProxyFactoryEntry) SetWinEventsForAutomationEvent(in UIA_E
 type IUIAutomationProxyFactoryMapping struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationProxyFactoryMapping) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationProxyFactoryMappingVtbl struct {
 	IUnKnownVtbl
 	ClearTable          uintptr
@@ -1947,6 +2182,11 @@ func (v *IUIAutomationProxyFactoryMapping) SetTable(in *TagSafeArray) error {
 type IUIAutomationStructureChangedEventHandler struct {
 	vtbl *IUnKnown
 }
+
+func (v *IUIAutomationStructureChangedEventHandler) Release() uint32 {
+	return v.vtbl.Release()
+}
+
 type IUIAutomationStructureChangedEventHandlerVtbl struct {
 	IUnKnownVtbl
 	HandleStructureChangedEvent uintptr
