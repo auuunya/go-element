@@ -2,6 +2,7 @@ package uiautomation
 
 import (
 	"errors"
+	"runtime"
 	"syscall"
 	"unsafe"
 )
@@ -28,10 +29,14 @@ func GetWindowForString(classname, windowname string) (uintptr, error) {
 }
 
 func CoInitialize() error {
+	runtime.LockOSThread()
 	ret, _, _ := procCoInitialize.Call(
 		uintptr(0),
 	)
-	if ret != 0 {
+	// CoInitialize returns S_FALSE (1) when COM is already initialized
+	// on this thread, which is still a successful result.
+	if ret != 0 && ret != 1 {
+		runtime.UnlockOSThread()
 		return HResult(ret)
 	}
 	return nil
@@ -39,6 +44,7 @@ func CoInitialize() error {
 
 func CoUninitialize() {
 	procCoUninitialize.Call()
+	runtime.UnlockOSThread()
 }
 
 func CreateInstance(clsid, riid *syscall.GUID, clsctx CLSCTX) (unsafe.Pointer, error) {
